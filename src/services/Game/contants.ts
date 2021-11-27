@@ -18,6 +18,8 @@ export const LEFT_RIGHT_SPEED_BUST = GameConstants.PERFECT_ONE / 30;
 export const FADING_COEF = 0.95;
 export const MAX_PLAYER_SPEED = GameConstants.PERFECT_ONE / 4;
 
+export const GAMEPAD_MOVEMENT_THRESHOLD = 0.5;
+
 // jumping and falling
 export const JUMP_VELOCITY = GameConstants.PERFECT_ONE / 80;
 export const JUMP_BUST_LIMIT = 14;

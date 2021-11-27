@@ -148,7 +148,7 @@ export class ObjectsDrawer {
                         i * GameConstants.PERFECT_ONE,
                         'yellow',
                         'darkgray',
-                        reachedKeys.a ? 'orange' : undefined,
+                        reachedKeys.a ? 'orange' : 'rgba(0,0,0,0.15)',
                     );
                     break;
                 }
@@ -167,7 +167,7 @@ export class ObjectsDrawer {
                         i * GameConstants.PERFECT_ONE,
                         'tomato',
                         'gray',
-                        reachedKeys.b ? 'purple' : undefined,
+                        reachedKeys.b ? 'purple' : 'rgba(0,0,0,0.15)',
                     );
                     break;
                 }
@@ -186,7 +186,7 @@ export class ObjectsDrawer {
                         i * GameConstants.PERFECT_ONE,
                         '#90ee90',
                         'gray',
-                        reachedKeys.c ? 'green' : undefined,
+                        reachedKeys.c ? 'green' : 'rgba(0,0,0,0.15)',
                     );
                     break;
                 }

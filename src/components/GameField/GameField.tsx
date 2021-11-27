@@ -89,7 +89,7 @@ export const GameField: React.FC<IGameFieldProps> = ({
         <div
             style={{
                 display: 'flex',
-                height: 'calc(100% - 60px)',
+                height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}

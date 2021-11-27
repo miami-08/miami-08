@@ -11,6 +11,7 @@ import {
     JUMP_VELOCITY,
     JUMP_VELOCITY_MODIFICATOR,
     GameConstants,
+    GAMEPAD_MOVEMENT_THRESHOLD,
 } from './contants';
 import { LVLs } from './lvls';
 import { ObjectsDrawer } from './services/ObjectsDrawer';
@@ -139,6 +140,18 @@ export class Game {
             this.animate.bind(this),
         );
 
+        let gamepadMovementX = null;
+        let gamepadJump = null;
+
+        const gamepad = navigator.getGamepads()[0];
+
+        if (gamepad) {
+            gamepadMovementX = Math.abs(gamepad?.axes[0]) > GAMEPAD_MOVEMENT_THRESHOLD
+                ? gamepad?.axes[0]
+                : null;
+            gamepadJump = gamepad?.buttons[0].pressed;
+        }
+
         const {
             top, right, bottom, left,
         } = this.canvasSides;
@@ -174,13 +187,17 @@ export class Game {
             this.velY += 2;
         }
 
-        if (this.keys.get('ArrowRight') || this.keys.get('d')) {
+        if (
+            this.keys.get('ArrowRight')
+            || this.keys.get('d')
+            || (gamepadMovementX && gamepadMovementX > GAMEPAD_MOVEMENT_THRESHOLD)
+        ) {
             if (this.velX < MAX_PLAYER_SPEED) {
                 this.velX += +LEFT_RIGHT_SPEED_BUST;
             }
         }
 
-        if (this.keys.get('ArrowUp') || this.keys.get('w')) {
+        if (this.keys.get('ArrowUp') || this.keys.get('w') || gamepadJump) {
             if (
                 this.ballMovementChecker.isBallCanJump(ballX, ballY)
                 && this.velY >= 0
@@ -195,7 +212,11 @@ export class Game {
             }
         }
 
-        if (this.keys.get('ArrowLeft') || this.keys.get('a')) {
+        if (
+            this.keys.get('ArrowLeft')
+            || this.keys.get('a')
+            || (gamepadMovementX && gamepadMovementX < -GAMEPAD_MOVEMENT_THRESHOLD)
+        ) {
             if (this.velX > -MAX_PLAYER_SPEED) {
                 this.velX -= LEFT_RIGHT_SPEED_BUST;
             }

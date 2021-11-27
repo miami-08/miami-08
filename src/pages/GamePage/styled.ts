@@ -13,13 +13,14 @@ export const Wrapper = styled.div`
 `;
 
 export const GamePanel = styled.div`
-    width: 100%;
-    height: 60px;
-    background: ${colors.primary};
+    position: absolute;
+    background: transparent;
     display: flex;
-    align-items: center;
-    box-sizing: border-box;
     padding: 5px 30px;
+    top: 20px;
+    left: 10px;
+    gap: 15px;
+    flex-direction: column;
 `;
 
 export const BackButton = styled(BaseButton)`
@@ -34,7 +35,9 @@ export const BackButton = styled(BaseButton)`
 export const Timer = styled.div`
     font-size: 30px;
     color: ${colors.white};
-
+    position: absolute;
+    bottom: 50px;
+    right: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
