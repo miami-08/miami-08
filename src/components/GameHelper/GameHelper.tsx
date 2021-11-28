@@ -27,7 +27,7 @@ const hint = `
 
 export const GameHelper: FC<IGameHelperProps> = ({ onClose }) => (
     <Styled.Container>
-        <BaseButton onClick={onClose}> Закрыть </BaseButton>
+        <BaseButton onClick={onClose}>Закрыть</BaseButton>
 
         <div>
             <pre>{hint}</pre>

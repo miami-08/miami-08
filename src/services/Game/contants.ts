@@ -1,12 +1,12 @@
 import { isServer } from 'store/rootStore';
 
-export const DISCRET_WIDTH_SIZE = 50;
+export const DISCRETE_WIDTH_SIZE = 50;
 
 export const PLAYER_RAD_MODIFIER = 0.9;
 
 export const GameConstants = {
     get PERFECT_ONE() {
-        return isServer ? 1 : window.innerWidth / DISCRET_WIDTH_SIZE;
+        return isServer ? 1 : window.innerWidth / DISCRETE_WIDTH_SIZE;
     },
     get PLAYER_DIAMETER() {
         return GameConstants.PERFECT_ONE * PLAYER_RAD_MODIFIER;

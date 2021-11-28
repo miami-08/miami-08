@@ -103,7 +103,7 @@ export const GamePage: FC = () => {
                 <BaseButton onClick={() => setHelperState(!helperOpened)}>
                     {helperOpened ? 'Закрыть' : 'Открыть'} подсказки
                 </BaseButton>
-                <BaseButton onClick={() => toggleFullscreen()}>
+                <BaseButton onClick={toggleFullscreen}>
                     {!fullscreenOpened ? 'На весь экран' : 'Свернуть'}
                 </BaseButton>
             </Styled.GamePanel>
