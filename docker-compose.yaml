@@ -2,7 +2,10 @@ version: '3'
 
 services:
     game:
-        image: nilfan/bounce-game
+        build:
+            context: .
+        ports:
+            - '3000:3000'
         depends_on:
             - postgres
         env_file: ./.env
