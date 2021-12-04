@@ -6,6 +6,7 @@ import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import routes from 'routes';
+import { dbConnect } from 'initSequelize';
 
 import config from '../webpack/client.config';
 
@@ -25,14 +26,17 @@ function getWebpackMiddlewares(): RequestHandler[] {
     ];
 }
 
+// подключение к БД необходимо для работы sequelize
+// eslint-disable-next-line func-names
+(async function () {
+    await dbConnect();
+}());
+
 const app = express();
 
-app.use('/api', routes);
-
-// Отдаём статику приложения
-app.use(express.static(path.resolve(__dirname, '../dist')));
-
-// На все get запросы запускаем сначала middleware dev server, а потом middleware рендеринга приложения
-app.get('/*', [...getWebpackMiddlewares()], serverRenderMiddleware);
+app.use(express.json())
+    .use('/api', routes)
+    .use(express.static(path.resolve(__dirname, '../dist')))
+    .get('/*', [...getWebpackMiddlewares()], serverRenderMiddleware);
 
 export { app };
