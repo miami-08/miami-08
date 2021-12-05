@@ -1,25 +1,35 @@
+import TObjectLiteral from 'types/TObjectLiteral';
+
+import { BallMovementChecker } from './services/BallMovementChecker';
 import {
-    MAX_GAMER_SPEED,
-    GAMER_RAD,
+    MAX_PLAYER_SPEED,
+    PLAYER_RAD,
     FALLING_COEF,
     FADING_COEF,
-    GAMER_INNER_COEF,
-    GAMER_BLICK_COEF,
     LEFT_RIGHT_SPEED_BUST,
     JUMP_BUST_LIMIT,
     JUMP_VELOCITY,
     JUMP_VELOCITY_MODIFICATOR,
-    COIN_RAD_X,
-    COIN_RAD_Y,
+    GameConstants,
 } from './contants';
-import { GameMap } from './GameMap';
-import { IPoint, ISides, IGameProps } from './types';
-import { isInRange } from './utils';
+import { LVLs } from './lvls';
+import { ObjectsDrawer } from './services/ObjectsDrawer';
+import {
+    IPoint,
+    ISides,
+    IGameProps,
+    TLvlOuterCallback,
+    LvlCreaser,
+} from './types';
 
 export class Game {
     private ctx: CanvasRenderingContext2D;
 
     private ballPosition: IPoint;
+
+    private ballMovementChecker: BallMovementChecker;
+
+    private objectsDrawer: ObjectsDrawer;
 
     private velY: number = 0;
 
@@ -27,51 +37,61 @@ export class Game {
 
     private keys = new Map<string, boolean>();
 
-    private map: GameMap;
-
     private canvasSides: ISides;
 
-    private endTime: number;
+    private reachedKeys: TObjectLiteral;
 
+    private lvlNum: number;
+
+    //
+    // Чтобы шарик прыгал плавно, при прыжке задаётся количество кадров и
+    // с каждым кадром он перемещается на некоторое расстояние по Y
+    //
     private jumpBust = 0;
 
-    private score = 0;
-
-    private currentCoinCoords: IPoint;
-
-    gameOverCallback: (points: number) => void;
+    lvlOuterCallback: TLvlOuterCallback;
 
     unsubscribeKeysCallback: () => void = () => {};
 
     setScore: (points: number) => void;
 
+    animationCallbackId: number = 0;
+
     constructor({
-        initPoint = { x: window.innerWidth - 100, y: window.innerHeight - 100 },
+        initBlock = { x: 1, y: 1 },
         canvasRef,
-        gameOverCallback,
-        endTime,
+        lvlOuterCallback,
         setScore,
+        lvlNum,
+        reachedKeys,
+        gameHeight,
+        gameWidth,
     }: IGameProps) {
         const context = canvasRef.getContext('2d');
 
-        this.endTime = endTime;
-
         this.setScore = setScore;
 
-        this.gameOverCallback = gameOverCallback;
+        this.lvlOuterCallback = lvlOuterCallback;
+
+        this.reachedKeys = { ...reachedKeys };
+
+        this.lvlNum = lvlNum;
 
         if (!context) {
             throw new Error("Отсутствует контекст Canvas'а");
         }
 
         this.ctx = context;
-        this.ballPosition = { ...initPoint };
+        this.ballPosition = {
+            x: initBlock.x * GameConstants.PERFECT_ONE,
+            y: initBlock.y * GameConstants.PERFECT_ONE,
+        };
 
         this.canvasSides = {
-            top: canvasRef.offsetTop,
-            bottom: canvasRef.height + canvasRef.offsetTop,
-            left: canvasRef.offsetLeft,
-            right: canvasRef.width + canvasRef.offsetLeft,
+            top: 0,
+            bottom: gameHeight,
+            left: 0,
+            right: gameWidth,
         };
 
         const keydownCallback = (e: KeyboardEvent) => this.keys.set(e.key, true);
@@ -86,17 +106,38 @@ export class Game {
             document.body.removeEventListener('keyup', keyupCallback);
         };
 
-        this.map = new GameMap(this.ctx);
+        this.objectsDrawer = new ObjectsDrawer(this.ctx, LVLs[lvlNum].map);
 
-        this.currentCoinCoords = this.map.findBlockCoordinates();
+        this.ballMovementChecker = new BallMovementChecker(
+            LVLs[lvlNum].map,
+            reachedKeys,
+        );
     }
 
     start() {
         this.animate();
     }
 
+    moveToNextLvl(gateSymbol: string) {
+        cancelAnimationFrame(this.animationCallbackId);
+
+        const moveValue = gateSymbol === LvlCreaser.Forward ? 1 : -1;
+
+        const initPoint = gateSymbol === LvlCreaser.Forward
+            ? LVLs[this.lvlNum + moveValue].entryPointA
+            : LVLs[this.lvlNum + moveValue].entryPointB;
+
+        this.lvlOuterCallback(
+            this.lvlNum + moveValue,
+            this.reachedKeys,
+            initPoint,
+        );
+    }
+
     animate() {
-        requestAnimationFrame(this.animate.bind(this));
+        this.animationCallbackId = requestAnimationFrame(
+            this.animate.bind(this),
+        );
 
         const {
             top, right, bottom, left,
@@ -104,153 +145,148 @@ export class Game {
 
         const { x: ballX, y: ballY } = this.ballPosition;
 
-        const closestFloor = this.map.closestFloor(ballX, ballY, bottom - top);
+        const ballCanFall = this.ballMovementChecker.ballCanFall(ballX, ballY);
+
+        const isBallCanGoLeft = this.ballMovementChecker.isBallCanGoLeft(
+            ballX,
+            ballY,
+        );
+
+        const isBallCanGoRight = this.ballMovementChecker.isBallCanGoRight(
+            ballX,
+            ballY,
+        );
+
+        const isNextLvlReached = this.ballMovementChecker.checkNextLvlReached(
+            ballX,
+            ballY,
+        );
+
+        if (isNextLvlReached) {
+            this.moveToNextLvl(isNextLvlReached);
+        }
 
         if (
-            this.velY < MAX_GAMER_SPEED
+            this.velY < MAX_PLAYER_SPEED
             && this.jumpBust === 0
-            && ballY < closestFloor - GAMER_RAD
+            && ballCanFall
         ) {
             this.velY += 2;
         }
 
         if (this.keys.get('ArrowRight') || this.keys.get('d')) {
-            if (this.velX < MAX_GAMER_SPEED) {
+            if (this.velX < MAX_PLAYER_SPEED) {
                 this.velX += +LEFT_RIGHT_SPEED_BUST;
             }
         }
 
         if (this.keys.get('ArrowUp') || this.keys.get('w')) {
             if (
-                this.velY > 0
-                && this.velY < 0.0001
-                && this.velY > -MAX_GAMER_SPEED
+                this.ballMovementChecker.isBallCanJump(ballX, ballY)
+                && this.velY >= 0
+                && this.velY > -MAX_PLAYER_SPEED
                 && this.jumpBust === 0
+                && !ballCanFall
             ) {
-                this.velY -= JUMP_VELOCITY;
+                this.velY = -JUMP_VELOCITY;
+
+                // "заряжаем" количество кадров для перемещения вверх
                 this.jumpBust = JUMP_BUST_LIMIT;
             }
         }
 
         if (this.keys.get('ArrowLeft') || this.keys.get('a')) {
-            if (this.velX > -MAX_GAMER_SPEED) {
+            if (this.velX > -MAX_PLAYER_SPEED) {
                 this.velX -= LEFT_RIGHT_SPEED_BUST;
             }
         }
 
-        if (this.jumpBust > 0) {
-            this.jumpBust -= 1;
-            this.ballPosition.y
-                += this.velY * (this.jumpBust + JUMP_VELOCITY_MODIFICATOR);
-        } else {
-            this.velY *= FALLING_COEF;
-            this.ballPosition.y += this.velY;
-        }
+        this.handelMovementOfY(ballX, ballY);
 
         this.velX *= FADING_COEF;
+
         this.ballPosition.x += this.velX;
 
-        if (this.ballPosition.x >= right - GAMER_RAD) {
-            this.ballPosition.x = right - GAMER_RAD;
-            this.velX = 0;
-        } else if (this.ballPosition.x <= left + GAMER_RAD) {
-            this.ballPosition.x = left + GAMER_RAD;
-            this.velX = 0;
+        if (!isBallCanGoRight) {
+            if (this.ballMovementChecker.isBallStuckInRightWall(ballX, ballY)) {
+                this.velX = -this.velX;
+                this.ballPosition.x += 2 * this.velX;
+            } else {
+                this.ballPosition.x = Math.ceil(
+                    (this.ballPosition.x / GameConstants.PERFECT_ONE)
+                        * GameConstants.PERFECT_ONE,
+                );
+            }
+        } else if (!isBallCanGoLeft) {
+            if (this.ballMovementChecker.isBallStuckInLeftWall(ballX, ballY)) {
+                this.velX = -this.velX;
+                this.ballPosition.x += 2 * this.velX;
+            } else {
+                this.ballPosition.x = Math.ceil(
+                    (this.ballPosition.x / GameConstants.PERFECT_ONE)
+                        * GameConstants.PERFECT_ONE,
+                );
+            }
         }
 
-        if (this.ballPosition.y >= closestFloor - GAMER_RAD) {
-            this.ballPosition.y = closestFloor - GAMER_RAD;
-        } else if (this.ballPosition.y <= top + GAMER_RAD) {
-            this.ballPosition.y = top + GAMER_RAD;
-        }
-
-        if (Date.now() >= this.endTime) {
-            this.unsubscribeKeysCallback();
-            this.gameOverCallback(this.score);
+        if (!ballCanFall && this.velY < 0.0000001) {
+            this.ballPosition.y = Math.floor(this.ballPosition.y / GameConstants.PERFECT_ONE)
+                    * GameConstants.PERFECT_ONE
+                + GameConstants.PERFECT_ONE
+                - 2 * PLAYER_RAD;
         }
 
         this.ctx.clearRect(left, top, right - left, bottom - top);
-        this.drawBackground();
+        this.objectsDrawer.drawBackground(this.canvasSides);
 
-        // this.drawPortal();
-
-        this.map.drawMap(bottom, right - left);
-        this.drawCoin();
-        this.drawBall();
-
-        this.checkCoinGetted();
+        this.objectsDrawer.drawMap(this.reachedKeys);
+        this.objectsDrawer.drawBall(this.ballPosition);
     }
 
-    private checkCoinGetted(): void {
-        const { x, y } = this.ballPosition;
-        if (
-            isInRange(this.currentCoinCoords.x, x - GAMER_RAD, x + GAMER_RAD)
-            && isInRange(this.currentCoinCoords.y, y - GAMER_RAD, y + GAMER_RAD)
-        ) {
-            this.score += 10;
-            this.setScore(this.score);
-            this.currentCoinCoords = this.map.findBlockCoordinates();
+    private handelMovementOfY(ballX: number, ballY: number): void {
+        // Если "запал" движения вверх не кончился:
+        if (this.jumpBust > 0) {
+            this.jumpBust -= 1;
+
+            // Двигаемся вверх причем, с каждым кадром медленнее,
+            // т.к. jumpBust с каждым кдром меньше
+            this.ballPosition.y
+                -= Math.abs(this.velY)
+                * (this.jumpBust + JUMP_VELOCITY_MODIFICATOR);
+
+            // Если пересекли блок сверху (застряли в нем)
+            if (this.ballMovementChecker.isBallStuckInTopWall(ballX, ballY)) {
+                // Возвращаемся, чтобы не пересекать блок сверху
+                this.ballPosition.y
+                    += Math.abs(this.velY)
+                    * (this.jumpBust + JUMP_VELOCITY_MODIFICATOR);
+
+                // "заряд" прыжка обнуляем
+                this.jumpBust = 0;
+
+                // задаем скорость падение вниз
+                this.velY = 1.5;
+            }
+        } else {
+            const pressedBlock = this.ballMovementChecker.getBlockWasPressed(
+                ballX,
+                ballY,
+                this.velY,
+            );
+            if (pressedBlock) {
+                if (typeof this.reachedKeys[pressedBlock] === 'undefined') {
+                    this.reachedKeys[pressedBlock] = true;
+                } else {
+                    this.reachedKeys[pressedBlock] = !this.reachedKeys[pressedBlock];
+                }
+            }
+
+            this.velY = Math.abs(this.velY) * FALLING_COEF;
+            this.ballPosition.y += this.velY;
+
+            if (this.velY > 0.0001) {
+                this.velY = 0;
+            }
         }
-    }
-
-    private drawBall = () => {
-        const { x, y } = this.ballPosition;
-
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, GAMER_RAD, 0, 2 * Math.PI);
-        this.ctx.fillStyle = '#5f96b3';
-        this.ctx.fill();
-        this.ctx.closePath();
-
-        this.ctx.beginPath();
-        this.ctx.fillStyle = '#487288';
-        this.ctx.arc(
-            x + GAMER_RAD / GAMER_INNER_COEF[0],
-            y + GAMER_RAD / GAMER_INNER_COEF[1],
-            GAMER_RAD / GAMER_INNER_COEF[2],
-            0,
-            2 * Math.PI,
-        );
-        this.ctx.fill();
-        this.ctx.closePath();
-
-        this.ctx.beginPath();
-        this.ctx.fillStyle = '#ead5db';
-        this.ctx.arc(
-            x + GAMER_RAD / GAMER_BLICK_COEF[0],
-            y + GAMER_RAD / GAMER_BLICK_COEF[1],
-            GAMER_RAD * GAMER_BLICK_COEF[2],
-            -2,
-            1,
-        );
-        this.ctx.fill();
-        this.ctx.closePath();
-    };
-
-    private drawCoin(): void {
-        const { x, y } = this.currentCoinCoords;
-
-        this.ctx.beginPath();
-        this.ctx.ellipse(x, y, COIN_RAD_X, COIN_RAD_Y, 0, 0, 2 * Math.PI);
-        this.ctx.fillStyle = '#ffd700';
-        this.ctx.fill();
-        this.ctx.closePath();
-
-        this.ctx.beginPath();
-        this.ctx.ellipse(x, y, COIN_RAD_X, COIN_RAD_Y, 0, 0, 2 * Math.PI);
-        this.ctx.strokeStyle = '#ffa500';
-        this.ctx.stroke();
-        this.ctx.closePath();
-    }
-
-    private drawBackground(): void {
-        const {
-            top, right, bottom, left,
-        } = this.canvasSides;
-
-        const height = bottom - top;
-        const width = right - left;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(left, top, width, height);
     }
 }

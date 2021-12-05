@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import AuthApi from 'api/authApi';
 import TObjectLiteral from 'types/TObjectLiteral';
+import { RoutePath } from 'RoutePath';
 
 import {
     logInFetching,
@@ -38,7 +39,7 @@ function* logOutRequest() {
 
         yield put(logOutFailed(reason));
     } finally {
-        yield call([history, history.push], '/sign-in');
+        yield call([history, history.push], RoutePath.SignIn);
     }
 }
 
@@ -75,7 +76,7 @@ function* signUpRequest(action: any) {
 
         yield call(currentUserRequest);
 
-        yield call([history, history.push], '/');
+        yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(signUpFailed(reason));
@@ -97,7 +98,7 @@ export function* signInRequest(action: any) {
 
         yield call(currentUserRequest);
 
-        yield call([history, history.push], '/');
+        yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(logInFailed(reason));

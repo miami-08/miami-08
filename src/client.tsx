@@ -9,7 +9,7 @@ import { IState } from 'store/types';
 import App from './App';
 
 // eslint-disable-next-line no-underscore-dangle
-const { store, history } = configureStore(
+export const { store, history } = configureStore(
     // eslint-disable-next-line no-underscore-dangle
     window.__INITIAL_STATE__,
 );

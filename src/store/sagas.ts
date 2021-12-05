@@ -11,6 +11,8 @@ import {
 import { changeInfoSaga, changePasswordSaga } from 'store/userProfile/sagas';
 import { changeLeaderboardSaga, getLeaderboardSaga } from 'store/leaderboard/sagas';
 
+import { updateGameProps } from './game/sagas';
+
 export default function* rootSaga() {
     yield all([
         signInSaga(),
@@ -23,5 +25,6 @@ export default function* rootSaga() {
         getTokenSaga(),
         changeLeaderboardSaga(),
         getLeaderboardSaga(),
+        updateGameProps(),
     ]);
 }

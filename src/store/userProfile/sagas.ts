@@ -1,5 +1,6 @@
 import { userApi } from 'api/userApi';
 import { call, put, takeEvery } from 'redux-saga/effects';
+import { RoutePath } from 'RoutePath';
 
 import ActionTypes from 'store/userProfile/actionTypes';
 
@@ -17,7 +18,7 @@ function* requestChangeInfo({ payload }: any) {
         );
 
         yield put(setUserData({ ...payload, ...response }));
-        yield call([history, history.push], '/user');
+        yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(dataFailed(reason));
@@ -37,7 +38,7 @@ function* requestChangePassword({ payload }: any) {
         );
 
         yield put(setUserData(response));
-        yield call([history, history.push], '/user');
+        yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(dataFailed(reason));

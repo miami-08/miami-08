@@ -16,6 +16,8 @@ import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
 import jsLoader from './loaders/js';
 
+const Dotenv = require('dotenv-webpack');
+
 const config: Configuration = {
     target: 'web',
     entry: [
@@ -48,6 +50,9 @@ const config: Configuration = {
         plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     },
     plugins: [
+        new Dotenv({
+            expand: true,
+        }),
         new MiniCssExtractPlugin({ filename: '[name].css' }),
         // Plugin для HMR
         new webpack.HotModuleReplacementPlugin(),

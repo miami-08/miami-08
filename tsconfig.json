@@ -17,6 +17,7 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "sourceMap": false,
     "baseUrl": ".",
@@ -32,7 +33,8 @@
       "assets/*": ["./src/assets/*"],
       "store/*": ["./src/store/*"],
       "utils/*": ["./src/utils/*"],
-      "types/*": ["./src/types/*"]
+      "types/*": ["./src/types/*"],
+      "models/*": ["./src/models/*"]
     },
     "typeRoots": ["typings/**/*.d.ts", "node_modules/@types"]
   },

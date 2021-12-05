@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FormikValues } from 'formik';
 import { TUserInfo } from 'types/TUserInfo';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RoutePath } from 'RoutePath';
 
 import ActionTypes from 'store/userProfile/actionTypes';
 import {
@@ -22,7 +23,7 @@ const ChangeUserInfoPage: FC<RouteComponentProps> = ({ history }) => {
     const user = useSelector(selectCurrentUser);
 
     const backToUserInfo = () => {
-        history.push('/user');
+        history.push(RoutePath.UserInfo);
     };
 
     const submit = (values: FormikValues) => {

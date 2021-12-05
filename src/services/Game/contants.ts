@@ -1,29 +1,37 @@
 import { isServer } from 'store/rootStore';
 
-export const DISCRET_WIDTH_SIZE = 75;
+export const DISCRET_WIDTH_SIZE = 50;
 
-const innerWidth = isServer ? 1000 : window.innerWidth;
+export const PLAYER_RAD_MODIFIER = 0.9;
 
-export const PERFECT_ONE = innerWidth / DISCRET_WIDTH_SIZE;
+export const GameConstants = {
+    get PERFECT_ONE() {
+        return isServer ? 1 : window.innerWidth / DISCRET_WIDTH_SIZE;
+    },
+    get PLAYER_DIAMETER() {
+        return GameConstants.PERFECT_ONE * PLAYER_RAD_MODIFIER;
+    },
+};
 
 // movement
-export const LEFT_RIGHT_SPEED_BUST = PERFECT_ONE / 8;
+export const LEFT_RIGHT_SPEED_BUST = GameConstants.PERFECT_ONE / 30;
 export const FADING_COEF = 0.95;
+export const MAX_PLAYER_SPEED = GameConstants.PERFECT_ONE / 4;
 
-export const FALLING_COEF = 0.72;
-export const MAX_JUMP_HEIGHT = PERFECT_ONE * 2;
-export const JUMP_BUST_LIMIT = 16;
-export const JUMP_VELOCITY = PERFECT_ONE / 40 / 1.5;
-export const JUMP_VELOCITY_MODIFICATOR = 10;
-
-export const MAX_GAMER_SPEED = PERFECT_ONE / 5;
+// jumping and falling
+export const JUMP_VELOCITY = GameConstants.PERFECT_ONE / 80;
+export const JUMP_BUST_LIMIT = 14;
+export const JUMP_VELOCITY_MODIFICATOR = GameConstants.PERFECT_ONE / 70;
+export const FALLING_COEF = 1.95;
 
 // ball sizes
-export const GAMER_RAD = PERFECT_ONE / 1.4;
-export const GAMER_INNER_COEF = [3.5714285714285716, -8.33333333, 1.666];
-export const GAMER_BLICK_COEF = [1.6666, -3.125, 0.2];
+
+export const PLAYER_RAD = (GameConstants.PERFECT_ONE / 2) * PLAYER_RAD_MODIFIER;
+
+export const PLAYER_INNER_COEF = [3.5714285714285716, -8.33333333, 1.666];
+export const PLAYER_BLICK_COEF = [1.6666, -3.125, 0.2];
 
 // coin sizes
 
-export const COIN_RAD_X = PERFECT_ONE / 3.5;
-export const COIN_RAD_Y = PERFECT_ONE / 2;
+export const COIN_RAD_X = GameConstants.PERFECT_ONE / 3.5;
+export const COIN_RAD_Y = GameConstants.PERFECT_ONE / 2;

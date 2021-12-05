@@ -1,4 +1,1 @@
-import { Game } from './Game';
-import { GameMap } from './GameMap';
-
-export { Game, GameMap };
+export { Game } from './Game';

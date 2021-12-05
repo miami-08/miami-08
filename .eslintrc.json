@@ -103,6 +103,11 @@
             "pattern": "uicomponents/**",
             "group": "external",
             "position": "after"
+          },
+          {
+            "pattern": "models/**",
+            "group": "external",
+            "position": "after"
           }
         ],
         "pathGroupsExcludedImportTypes": ["builtin"],

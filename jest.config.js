@@ -14,6 +14,7 @@ module.exports = {
         '^api/(.*)$': '<rootDir>/src/api/$1',
         '^store/(.*)$': '<rootDir>/src/store/$1',
         '^utils/(.*)$': '<rootDir>/src/utils/$1',
+        '^models/(.*)$': '<rootDir>/src/models/$1',
     },
     clearMocks: true,
 };

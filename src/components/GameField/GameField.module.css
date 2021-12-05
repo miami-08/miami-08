@@ -1,0 +1,10 @@
+.container {
+    height: calc(100% - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mapHolder {
+    background-color: white;
+}

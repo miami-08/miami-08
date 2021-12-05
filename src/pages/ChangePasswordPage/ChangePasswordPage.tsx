@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { FormikValues } from 'formik';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RoutePath } from 'RoutePath';
 
 import ActionTypes from 'store/userProfile/actionTypes';
 
@@ -14,7 +15,7 @@ const ChangePasswordPage: FC<RouteComponentProps> = ({ history }) => {
     const dispatch = useDispatch();
 
     const backToUserInfo = () => {
-        history.push('/user');
+        history.push(RoutePath.UserInfo);
     };
 
     const submit = (values: FormikValues) => {

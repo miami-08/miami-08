@@ -3,6 +3,7 @@ import { ThemeProvider } from 'styled-components';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hot } from 'react-hot-loader/root';
+import { RoutePath } from 'RoutePath';
 
 import { selectUserPending } from 'store/userProfile/selectors';
 import ActionTypesLeaderboard from 'store/leaderboard/actionTypes';
@@ -46,34 +47,34 @@ const App: FC = () => {
                         'pending'
                     ) : (
                         <Switch>
-                            <Route exact path="/">
+                            <Route exact path={RoutePath.Home}>
                                 <HomePage />
                             </Route>
-                            <Route path="/leaderboard">
+                            <Route path={RoutePath.Leaderboard}>
                                 <Leaderboard />
                             </Route>
-                            <Route path="/sign-up">
+                            <Route path={RoutePath.SignUp}>
                                 <SignUpWithData />
                             </Route>
-                            <Route path="/sign-in">
+                            <Route path={RoutePath.SignIn}>
                                 <SignInWithData />
                             </Route>
-                            <Route path="/game">
+                            <Route path={RoutePath.Game}>
                                 <GamePage />
                             </Route>
-                            <Route path="/loading">
+                            <Route path={RoutePath.Loading}>
                                 <LoadingPage />
                             </Route>
-                            <Route path="/forum">
+                            <Route path={RoutePath.Forum}>
                                 <Forum />
                             </Route>
-                            <ProtectedRoute exact path="/user">
+                            <ProtectedRoute exact path={RoutePath.UserInfo}>
                                 <UserPageWithRouter />
                             </ProtectedRoute>
-                            <ProtectedRoute path="/user/change-password">
+                            <ProtectedRoute path={RoutePath.ChangePasswordPage}>
                                 <ChangePasswordPageWithRouter />
                             </ProtectedRoute>
-                            <ProtectedRoute path="/user/change-info">
+                            <ProtectedRoute path={RoutePath.ChangeUserInfoPage}>
                                 <ChangeUserInfoPageWithRouter />
                             </ProtectedRoute>
                             <Redirect to="/" />

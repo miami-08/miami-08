@@ -11,10 +11,10 @@ import { StaticRouter, StaticRouterContext } from 'react-router';
 
 import rootSaga from 'store/sagas';
 import { IState } from 'store/types';
+import { configureStore } from 'store/rootStore';
+import { getInitialState } from 'store/getInitialState';
 
 import App from './App';
-import { configureStore } from './store/rootStore';
-import { getInitialState } from './store/getInitialState';
 
 function getHtml({
     reactHtml,

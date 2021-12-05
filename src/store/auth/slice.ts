@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import TAuthStatus from 'types/TAuthStatus';
 
-export const initialState = {
+export const initialState: TAuthStatus = {
     pending: false,
     error: null,
     serviceId: null,
