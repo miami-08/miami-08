@@ -1,10 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import ActionTypes from 'store/forum/actionTypes';
 
 import { fakeElements } from 'components/Forum/fakeData';
 import { TableBody } from 'components/Forum/TableBody';
 import { TableHead } from 'components/Forum/TableHead';
-import { TextEditor } from 'components/Forum/TextEditor';
 
 import { Title } from 'ui/components/Title';
 import { BaseButton } from 'ui/components';
@@ -12,7 +14,14 @@ import { BaseButton } from 'ui/components';
 import * as Styled from './styled';
 
 export const Forum: FC = () => {
-    const [isOpen, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const dispatch = useDispatch();
+    const createTopic = useCallback(() => {
+        dispatch({
+            type: ActionTypes.CreateTopic,
+            payload: { title: inputValue },
+        });
+    }, [dispatch]);
     return (
         <Styled.Wrapper>
             <Title>Форум</Title>
@@ -26,12 +35,11 @@ export const Forum: FC = () => {
                     </Styled.TableForum>
                 </>
             ))}
-            {isOpen ? <TextEditor /> : null}
-            <BaseButton
-                view="primaryFlat"
-                size="s"
-                onClick={() => setOpen(!isOpen)}
-            >
+            <input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+            />
+            <BaseButton view="primaryFlat" size="s" onClick={createTopic}>
                 Новый пост
             </BaseButton>
 

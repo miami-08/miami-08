@@ -9,6 +9,7 @@ import {
     getTokenSaga,
 } from 'store/auth/sagas';
 import { changeInfoSaga, changePasswordSaga } from 'store/userProfile/sagas';
+import { getTopicsSaga } from 'store/forum/sagas';
 
 import { updateGameProps } from './game/sagas';
 
@@ -23,5 +24,6 @@ export default function* rootSaga() {
         oAuthSignInSaga(),
         getTokenSaga(),
         updateGameProps(),
+        getTopicsSaga(),
     ]);
 }
