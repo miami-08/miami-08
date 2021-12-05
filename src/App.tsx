@@ -7,7 +7,7 @@ import { RoutePath } from 'RoutePath';
 
 import { selectUserPending } from 'store/userProfile/selectors';
 import ActionUserTypes from 'store/auth/actionTypes';
-import ActionForumTypes from 'store/forum/actionTypes';
+// import ActionForumTypes from 'store/forum/actionTypes';
 
 import { SignUpWithData } from 'pages/SignUp';
 import { Leaderboard } from 'pages/Leaderboard';
@@ -33,7 +33,7 @@ const App: FC = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch({ type: ActionUserTypes.GetUser });
-        dispatch({ type: ActionForumTypes.GetTopics });
+        // dispatch({ type: ActionForumTypes.GetTopics });
     }, [dispatch]);
 
     const isPending = useSelector(selectUserPending);
