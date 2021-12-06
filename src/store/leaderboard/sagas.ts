@@ -12,16 +12,16 @@ function* getLeaderboardInfo() {
     yield put(dataFetching());
 
     try {
-        const response: TObjectLiteral = yield call(
-            teamLeaderboard,
-        );
+        const response: TObjectLiteral = yield call(teamLeaderboard);
 
         const newData = response.data.map((data: IDataProps) => ({
             ...data.data,
         }));
 
         const arrayForSort = [...newData];
-        const sorted = arrayForSort.sort((a, b) => b!.points - a!.points).slice(0, 5);
+        const sorted = arrayForSort
+            .sort((a, b) => b!.points - a!.points)
+            .slice(0, 5);
 
         yield put(setLeaderboard(sorted));
     } catch (e: any) {
@@ -37,10 +37,7 @@ function* addTeamLeaderboard({ payload }: any) {
     yield put(dataFetching());
 
     try {
-        yield call(
-            addLeaderboard,
-            payload,
-        );
+        yield call(addLeaderboard, payload);
     } catch (e: any) {
         const { reason = null } = e.response.data;
 

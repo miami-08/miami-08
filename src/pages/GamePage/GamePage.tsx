@@ -54,11 +54,16 @@ export const GamePage: FC = () => {
         };
         const leaderInit = {} as ILeadersProps;
         const currentUser = Array.isArray(leaderboard.leaderboardInfo)
-            ? leaderboard.leaderboardInfo.filter((el) => user!.login === el!.name)
+            ? leaderboard.leaderboardInfo.filter(
+                  (el) => user!.login === el!.name,
+              )
             : [leaderInit];
 
         if (score > currentUser[0]!.points) {
-            dispatch({ type: ActionTypes.ChangeLeaderboard, payload: requestData });
+            dispatch({
+                type: ActionTypes.ChangeLeaderboard,
+                payload: requestData,
+            });
         }
     }, [score, dispatch]);
 

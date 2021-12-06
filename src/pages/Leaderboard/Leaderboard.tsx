@@ -22,7 +22,9 @@ export const Leaderboard: FC = () => {
             <Title>LeaderBoard</Title>
             <Styled.LeaderTable>
                 <TableHead />
-                {leaderboard?.leaderboardInfo?.length ? <TableBody elements={leaderboard?.leaderboardInfo} /> : null}
+                {leaderboard?.leaderboardInfo?.length ? (
+                    <TableBody elements={leaderboard?.leaderboardInfo} />
+                ) : null}
             </Styled.LeaderTable>
             <BaseButton size="s" view="primaryFlat">
                 <Link to="/">Домой</Link>

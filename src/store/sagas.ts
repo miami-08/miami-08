@@ -13,7 +13,10 @@ import {
     changePasswordSaga,
     changeThemeSaga,
 } from 'store/userProfile/sagas';
-import { changeLeaderboardSaga, getLeaderboardSaga } from 'store/leaderboard/sagas';
+import {
+    changeLeaderboardSaga,
+    getLeaderboardSaga,
+} from 'store/leaderboard/sagas';
 
 import { updateGameProps } from './game/sagas';
 import {
