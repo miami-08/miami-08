@@ -11,6 +11,7 @@ import {
 } from 'store/userProfile/selectors';
 import ActionTypes from 'store/auth/actionTypes';
 import ActionForumTypes from 'store/forum/actionTypes';
+import ActionTypesLeaderboard from 'store/leaderboard/actionTypes';
 
 import { SignUpWithData } from 'pages/SignUp';
 import { Leaderboard } from 'pages/Leaderboard';
@@ -34,14 +35,15 @@ const App: FC = () => {
     useOAuth();
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch({ type: ActionTypes.GetUser });
         dispatch({ type: ActionForumTypes.GetTopics });
+        dispatch({ type: ActionTypesLeaderboard.GetLeaderboard });
     }, [dispatch]);
 
     const isPending = useSelector(selectUserPending);
     const user = useSelector(selectCurrentUser);
-    console.log(user);
 
     return (
         <ThemeProvider theme={user ? themes[user.theme] : themes.light}>

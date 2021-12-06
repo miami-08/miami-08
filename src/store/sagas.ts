@@ -13,6 +13,7 @@ import {
     changePasswordSaga,
     changeThemeSaga,
 } from 'store/userProfile/sagas';
+import { changeLeaderboardSaga, getLeaderboardSaga } from 'store/leaderboard/sagas';
 
 import { updateGameProps } from './game/sagas';
 import {
@@ -31,6 +32,8 @@ export default function* rootSaga() {
         currentUserSaga(),
         oAuthSignInSaga(),
         getTokenSaga(),
+        changeLeaderboardSaga(),
+        getLeaderboardSaga(),
         updateGameProps(),
         changeThemeSaga(),
         createMessageSaga(),

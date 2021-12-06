@@ -1,13 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { teamLeaderboard, addLeaderboard } from 'api/leaderboardApi';
-import { AxiosResponse, AxiosError } from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { RoutePath } from 'RoutePath';
 
 import { selectCurrentUser } from 'store/userProfile/selectors';
 import { isServer } from 'store/rootStore';
+import ActionTypes from 'store/leaderboard/actionTypes';
+import { leaderboardStateSelector } from 'store/leaderboard/selectors';
 import { gameStateSelector } from 'store/game/selectors';
+
+import { ILeadersProps } from 'pages/LeaderBoard/types';
 
 import { GameField } from 'components/GameField/GameField';
 
@@ -20,11 +22,12 @@ import * as Styled from './styled';
 export const GamePage: FC = () => {
     const [score, setScore] = useState(0);
 
-    const [oldPoints, setOldPoints] = useState(0);
-
     const gameProps = useSelector(gameStateSelector);
 
     const user = useSelector(selectCurrentUser);
+    const leaderboard = useSelector(leaderboardStateSelector);
+
+    const dispatch = useDispatch();
 
     const history = useHistory();
 
@@ -39,20 +42,6 @@ export const GamePage: FC = () => {
     }, []);
 
     useEffect(() => {
-        teamLeaderboard()
-            .then((response: AxiosResponse<any>) => {
-                setOldPoints(response.data[0].data.points);
-            })
-            .catch((err: AxiosError) => {
-                if (err.response?.status === 401) {
-                    console.log('err');
-                }
-            });
-
-        return () => {};
-    }, []);
-
-    useEffect(() => {
         const newData = {
             miami7: Date.now(),
             name: user ? user.login : null,
@@ -63,16 +52,15 @@ export const GamePage: FC = () => {
             ratingFieldName: 'miami7',
             teamName: 'miami7',
         };
-        if (score > oldPoints) {
-            addLeaderboard(requestData).catch((err: AxiosError) => {
-                if (err.response?.status === 401) {
-                    console.log('err');
-                }
-            });
-        }
+        const leaderInit = {} as ILeadersProps;
+        const currentUser = Array.isArray(leaderboard.leaderboardInfo)
+            ? leaderboard.leaderboardInfo.filter((el) => user!.login === el!.name)
+            : [leaderInit];
 
-        return () => {};
-    }, [score]);
+        if (score > currentUser[0]!.points) {
+            dispatch({ type: ActionTypes.ChangeLeaderboard, payload: requestData });
+        }
+    }, [score, dispatch]);
 
     return (
         <Styled.Wrapper>
