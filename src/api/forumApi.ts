@@ -9,8 +9,7 @@ enum ForumUrls {
 }
 
 class ForumApi {
-    getTopics = () =>
-        axiosApiInstance.get(ForumUrls.GetTopics);
+    getTopics = () => axiosApiInstance.get(ForumUrls.GetTopics);
 
     createTopic(data: TObjectLiteral) {
         axiosApiInstance.post(ForumUrls.CreateTopic, JSON.stringify(data));

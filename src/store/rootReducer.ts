@@ -17,4 +17,3 @@ export default (history: History) =>
         forum: forumReducer,
         game: gameReducer,
     });
-

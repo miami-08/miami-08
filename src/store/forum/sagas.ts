@@ -5,7 +5,7 @@ import TObjectLiteral from 'types/TObjectLiteral';
 import ActionTypes from 'store/forum/actionTypes';
 
 import { dataFailed, dataFetching, setForumData } from './slice';
-import AuthApi from "api/authApi";
+import AuthApi from 'api/authApi';
 
 function* requestGetForumData() {
     yield put(dataFetching());
@@ -28,7 +28,7 @@ function* requestCreateTopic({ payload }: any) {
 
     try {
         const response: TObjectLiteral = yield call(forumApi.getTopics);
-        console.log('hi', response)
+        console.log('hi', response);
         yield call(forumApi.createTopic, payload);
 
         yield put(setForumData({ ...response, ...payload }));
@@ -46,7 +46,6 @@ function* requestCreateMessage({ payload }: any) {
 
     try {
         yield call(forumApi.createMessage, payload);
-
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(dataFailed(reason));

@@ -5,9 +5,9 @@ import {
     findTheme,
     updateUserThemeById,
 } from 'models/UserTheme/controllers';
-import {createUser, getAllUsers} from 'models/User/controllers';
-import {createMsg, getMsgsByTopicId} from "models/Message/controllers";
-import {createTopic, getTopics} from 'models/Topic/controllers';
+import { createUser, getAllUsers } from 'models/User/controllers';
+import { createMsg, getMsgsByTopicId } from 'models/Message/controllers';
+import { createTopic, getTopics } from 'models/Topic/controllers';
 
 const router = express.Router();
 
@@ -37,18 +37,22 @@ router.post('/change-theme', async (req, res) => {
 });
 
 router.get('/get-topics', async (_, res) => {
-         const topics = await getTopics();
-         const users = await getAllUsers();
-         const topicsWithMessages = await Promise.all(topics.map(async (topic) => {
-             const messages = await getMsgsByTopicId(topic.id);
-             const newMessages = messages.map((mes) => {
-                 const currentUser = users.filter((user) => user.identifier === mes.UserIdentifier)[0];
-                 console.log(users, mes.UserIdentifier);
-                 return { ...mes.dataValues, ...currentUser.dataValues }
-             })
-             return { id: topic.id, title: topic.title, messages: newMessages }
-         }))
-        res.json(topicsWithMessages);
+    const topics = await getTopics();
+    const users = await getAllUsers();
+    const topicsWithMessages = await Promise.all(
+        topics.map(async (topic) => {
+            const messages = await getMsgsByTopicId(topic.id);
+            const newMessages = messages.map((mes) => {
+                const currentUser = users.filter(
+                    (user) => user.identifier === mes.UserIdentifier,
+                )[0];
+                console.log(users, mes.UserIdentifier);
+                return { ...mes.dataValues, ...currentUser.dataValues };
+            });
+            return { id: topic.id, title: topic.title, messages: newMessages };
+        }),
+    );
+    res.json(topicsWithMessages);
 });
 
 router.post('/create-topic', (req, res) => {
@@ -59,7 +63,7 @@ router.post('/create-topic', (req, res) => {
 
 router.post('/create-message', async (req, res) => {
     const { text = '', UserIdentifier = 0, TopicId = 0 } = req.body;
-    createMsg(text, UserIdentifier, TopicId)
+    createMsg(text, UserIdentifier, TopicId);
     res.sendStatus(200);
 });
 

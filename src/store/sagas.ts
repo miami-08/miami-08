@@ -15,7 +15,11 @@ import {
 } from 'store/userProfile/sagas';
 
 import { updateGameProps } from './game/sagas';
-import {createMessageSaga, createTopicsSaga, getTopicsSaga} from "store/forum/sagas";
+import {
+    createMessageSaga,
+    createTopicsSaga,
+    getTopicsSaga,
+} from 'store/forum/sagas';
 
 export default function* rootSaga() {
     yield all([

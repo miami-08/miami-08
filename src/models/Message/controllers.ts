@@ -1,6 +1,10 @@
 import { Message } from 'initSequelize';
 
-export async function createMsg(text: string, UserIdentifier: number, TopicId: number) {
+export async function createMsg(
+    text: string,
+    UserIdentifier: number,
+    TopicId: number,
+) {
     return Message.create({ text, UserIdentifier, TopicId });
 }
 

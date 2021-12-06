@@ -2,7 +2,7 @@ import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 
 import { userThemeModel } from 'models/UserTheme/model';
 import { userModel } from 'models/User/model';
-import {messageModel} from "models/Message/model";
+import { messageModel } from 'models/Message/model';
 import { topicModel } from 'models/Topic/model';
 
 const sequelizeOptions: SequelizeOptions = {

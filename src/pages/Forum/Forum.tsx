@@ -1,11 +1,11 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ActionTypes from 'store/forum/actionTypes';
 
 import { Title } from 'ui/components/Title';
-import {BaseButton, Input} from 'ui/components';
+import { BaseButton, Input } from 'ui/components';
 
 import * as Styled from './styled';
 import { TRootState } from 'store/types';
@@ -40,55 +40,76 @@ export const Forum: FC = () => {
 
         setInputValue((state) => ({
             ...state,
-            [name]: value
+            [name]: value,
         }));
-    }
+    };
     console.log(inputValue);
     return (
         <Styled.Wrapper>
             <Title>Форум</Title>
-            {forumData ? forumData.data.map((el) => (
-                <div key={el.id}>
-                    <Styled.Category>{el.title}</Styled.Category>
-                      <Styled.Messages>
-                        {el.messages.map((message) => (
-                            <div key={message.id}>
-                                <Styled.Name>{message.secondName + ' ' + message.firstName}</Styled.Name>
-                                <Styled.Text>{message.text}</Styled.Text>
-                            </div>
-                        ))}
-                    </Styled.Messages>
+            {forumData
+                ? forumData.data.map((el) => (
+                      <div key={el.id}>
+                          <Styled.Category>{el.title}</Styled.Category>
+                          <Styled.Messages>
+                              {el.messages.map((message) => (
+                                  <div key={message.id}>
+                                      <Styled.Name>
+                                          {message.secondName +
+                                              ' ' +
+                                              message.firstName}
+                                      </Styled.Name>
+                                      <Styled.Text>{message.text}</Styled.Text>
+                                  </div>
+                              ))}
+                          </Styled.Messages>
 
-
-                    {user ? (
-                        <>
-                        <Input type="text" name={el.title} value={inputValue[el.title]} onChange={handleInputChange} placeholder={'Сообщение'}/>
-                        <div>
-                            <BaseButton onClick={() => createMessage(el.id, user.id, inputValue[el.title])}>
-                                Отправить
-                            </BaseButton>
-                        </div>
-                        </>
-                    ) : null}
-
-                </div>
-            )): 'Нет тем'}
+                          {user ? (
+                              <>
+                                  <Input
+                                      type="text"
+                                      name={el.title}
+                                      value={inputValue[el.title]}
+                                      onChange={handleInputChange}
+                                      placeholder={'Сообщение'}
+                                  />
+                                  <div>
+                                      <BaseButton
+                                          onClick={() =>
+                                              createMessage(
+                                                  el.id,
+                                                  user.id,
+                                                  inputValue[el.title],
+                                              )
+                                          }
+                                      >
+                                          Отправить
+                                      </BaseButton>
+                                  </div>
+                              </>
+                          ) : null}
+                      </div>
+                  ))
+                : 'Нет тем'}
 
             {user ? (
                 <>
-                <h5>Новый пост</h5>
-                <input
-                    value={inputValue["newTopic"]}
-                    name="newTopic"
-                    placeholder={'Новая тема'}
-                    onChange={handleInputChange}
-                />
-                <BaseButton view="primaryFlat" size="s" onClick={createTopic}>
-                    Создать пост
-                </BaseButton>
+                    <h5>Новый пост</h5>
+                    <input
+                        value={inputValue['newTopic']}
+                        name="newTopic"
+                        placeholder={'Новая тема'}
+                        onChange={handleInputChange}
+                    />
+                    <BaseButton
+                        view="primaryFlat"
+                        size="s"
+                        onClick={createTopic}
+                    >
+                        Создать пост
+                    </BaseButton>
                 </>
-            ): null}
-
+            ) : null}
 
             <BaseButton view="primaryFlat" size="s">
                 <Link to="/"> Домой </Link>

@@ -6,7 +6,7 @@ import { SagaMiddleware } from '@redux-saga/core';
 import { store } from 'client';
 
 import { TGameState } from './game/slice';
-import TForum from "types/TForum";
+import TForum from 'types/TForum';
 
 export interface IState {
     router: RouterState;
