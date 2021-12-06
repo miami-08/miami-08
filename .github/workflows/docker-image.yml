@@ -3,8 +3,6 @@ name: Docker Image CI
 on:
     push:
         branches: [dev]
-    pull_request:
-        branches: [dev]
 
 jobs:
     push-docker-image:
@@ -34,4 +32,4 @@ jobs:
                   host: ${{ secrets.HOST }}
                   username: ${{ secrets.USERNAME }}
                   key: ${{ secrets.KEY }}
-                  script: cd app && sudo docker pull nilfan/bounce-game:latest && sudo docker-compose up -d game
+                  script: cd app && sudo docker pull nilfan/bounce-game:latest && sudo docker-compose up -d nginx
