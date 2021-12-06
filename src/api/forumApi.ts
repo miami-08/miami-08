@@ -4,8 +4,8 @@ import { axiosApiInstance } from 'api/axios';
 
 enum ForumUrls {
     GetTopics = 'get-topics',
-    GetMessages = 'get-messages',
     CreateTopic = 'create-topic',
+    CreateMessage = 'create-message',
 }
 
 class ForumApi {
@@ -17,8 +17,8 @@ class ForumApi {
         axiosApiInstance.post(ForumUrls.CreateTopic, JSON.stringify(data));
     }
 
-    getMessages(data: TObjectLiteral) {
-        axiosApiInstance.post(ForumUrls.GetMessages, JSON.stringify(data));
+    createMessage(data: TObjectLiteral) {
+        axiosApiInstance.post(ForumUrls.CreateMessage, JSON.stringify(data));
     }
 }
 

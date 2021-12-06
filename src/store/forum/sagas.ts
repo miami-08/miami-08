@@ -38,3 +38,21 @@ function* requestCreateTopic({ payload }: any) {
 export function* createTopicsSaga() {
     yield takeEvery(ActionTypes.CreateTopic, requestCreateTopic);
 }
+
+function* requestCreateMessage({ payload }: any) {
+    yield put(dataFetching());
+
+    try {
+        const response: TObjectLiteral = yield call(forumApi.getTopics);
+        yield call(forumApi.createMessage, payload);
+        const currentTopic = response.filter((el) => el.id === payload.TopicId)
+
+        yield put(setForumData({ ...response, ...currentTopic }));
+    } catch (e: any) {
+        const { reason = null } = e.response.data;
+        yield put(dataFailed(reason));
+    }
+}
+export function* createMessageSaga() {
+    yield takeEvery(ActionTypes.CreateMessage, requestCreateMessage);
+}

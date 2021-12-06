@@ -1,6 +1,6 @@
 enum ActionTypes {
     CreateTopic = 'createTopic',
-    ChangeMessages = 'changeMessages',
+    CreateMessage = 'createMessage',
     GetTopics = 'getTopics',
 }
 
