@@ -1,6 +1,6 @@
-import React, {FC, useCallback, useState} from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ActionTypes from 'store/forum/actionTypes';
 
@@ -18,16 +18,19 @@ export const Forum: FC = () => {
     const forumData = useSelector((state: TRootState) => state.forum.forumData);
 
     console.log(forumData);
-    const createTopic = useCallback((title) => {
-        dispatch({
-            type: ActionTypes.CreateTopic,
-            payload: { title },
-        });
-        setInputValue((state) => ({
-            ...state,
-            'newTopic': '',
-        }));
-    }, [dispatch]);
+    const createTopic = useCallback(
+        (title) => {
+            dispatch({
+                type: ActionTypes.CreateTopic,
+                payload: { title },
+            });
+            setInputValue((state) => ({
+                ...state,
+                newTopic: '',
+            }));
+        },
+        [dispatch],
+    );
 
     const createMessage = useCallback(
         (TopicId, UserIdentifier, text, title) => {
@@ -89,7 +92,7 @@ export const Forum: FC = () => {
                                                   el.id,
                                                   user.id,
                                                   inputValue[el.title],
-                                                  el.title
+                                                  el.title,
                                               )
                                           }
                                       >
