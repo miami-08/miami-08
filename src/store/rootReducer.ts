@@ -9,10 +9,11 @@ import forumReducer from 'store/forum/slice';
 
 import { IState } from './types';
 
-export default (history: History) => combineReducers<IState>({
-    router: connectRouter(history),
-    user: userReducer,
-    auth: authReducer,
-    forum: forumReducer,
-    game: gameReducer,
-});
+export default (history: History) =>
+    combineReducers<IState>({
+        router: connectRouter(history),
+        user: userReducer,
+        auth: authReducer,
+        forum: forumReducer,
+        game: gameReducer,
+    });

@@ -9,7 +9,7 @@ router.get('/get-topics', (_, res) => {
     getTopics()
         .then((data) => {
             const messages = getMsgsByTopicId(data.id);
-            return { data, messages }
+            return { data, messages };
         })
         .then((data) => res.json(data))
         .catch(() => {

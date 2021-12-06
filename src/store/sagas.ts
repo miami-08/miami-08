@@ -9,7 +9,11 @@ import {
     getTokenSaga,
 } from 'store/auth/sagas';
 import { changeInfoSaga, changePasswordSaga } from 'store/userProfile/sagas';
-import {createMessageSaga, createTopicsSaga, getTopicsSaga} from 'store/forum/sagas';
+import {
+    createMessageSaga,
+    createTopicsSaga,
+    getTopicsSaga,
+} from 'store/forum/sagas';
 
 import { updateGameProps } from './game/sagas';
 

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { ITheme } from 'ui/themes';
 import { BackButton, BaseButton, Table } from 'ui/components';
-import {colors} from "ui/colors";
+import { colors } from 'ui/colors';
 
 export const Wrapper = styled.div`
     display: flex;

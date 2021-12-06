@@ -22,9 +22,7 @@ export const UIForm: React.FC<IUIFormProps> = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
     >
-        {({
-            values, errors, touched, handleChange,
-        }) => (
+        {({ values, errors, touched, handleChange }) => (
             <Form>
                 <Styled.DynamicFormBox>
                     <Styled.Title>{title}</Styled.Title>

@@ -45,7 +45,7 @@ function* requestCreateMessage({ payload }: any) {
     try {
         const response: TObjectLiteral = yield call(forumApi.getTopics);
         yield call(forumApi.createMessage, payload);
-        const currentTopic = response.filter((el) => el.id === payload.TopicId)
+        const currentTopic = response.filter((el) => el.id === payload.TopicId);
 
         yield put(setForumData({ ...response, ...currentTopic }));
     } catch (e: any) {

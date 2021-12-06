@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ActionTypes from 'store/forum/actionTypes';
 
@@ -8,14 +8,14 @@ import { Title } from 'ui/components/Title';
 import { BaseButton } from 'ui/components';
 
 import * as Styled from './styled';
-import {TRootState} from "store/types";
-import {selectCurrentUser} from "store/userProfile/selectors";
+import { TRootState } from 'store/types';
+import { selectCurrentUser } from 'store/userProfile/selectors';
 
 export const Forum: FC = () => {
     const [inputValue, setInputValue] = useState('');
     const dispatch = useDispatch();
     const user = useSelector(selectCurrentUser);
-    const forumData = useSelector((state: TRootState) => state.forum)
+    const forumData = useSelector((state: TRootState) => state.forum);
     const createTopic = useCallback(() => {
         dispatch({
             type: ActionTypes.CreateTopic,
@@ -23,12 +23,15 @@ export const Forum: FC = () => {
         });
     }, [dispatch]);
 
-    const createMessage = useCallback((id) => {
-        dispatch({
-            type: ActionTypes.CreateMessage,
-            payload: { UserId: user.id, TopicId: id },
-        });
-    }, [dispatch]);
+    const createMessage = useCallback(
+        (id) => {
+            dispatch({
+                type: ActionTypes.CreateMessage,
+                payload: { UserId: user.id, TopicId: id },
+            });
+        },
+        [dispatch],
+    );
     return (
         <Styled.Wrapper>
             <Title>Форум</Title>
@@ -44,7 +47,9 @@ export const Forum: FC = () => {
                         ))}
                     </Styled.Messages>
                     <input type="text" />
-                    <BaseButton onClick={createMessage}>Новое сообщение</BaseButton>
+                    <BaseButton onClick={createMessage}>
+                        Новое сообщение
+                    </BaseButton>
                 </>
             ))}
             <input
