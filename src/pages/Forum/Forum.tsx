@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import ActionTypes from 'store/forum/actionTypes';
 
@@ -17,19 +17,28 @@ export const Forum: FC = () => {
     const user = useSelector(selectCurrentUser);
     const forumData = useSelector((state: TRootState) => state.forum.forumData);
 
-    const createTopic = useCallback(() => {
+    console.log(forumData);
+    const createTopic = useCallback((title) => {
         dispatch({
             type: ActionTypes.CreateTopic,
-            payload: { title: 'hello' },
+            payload: { title },
         });
+        setInputValue((state) => ({
+            ...state,
+            'newTopic': '',
+        }));
     }, [dispatch]);
 
     const createMessage = useCallback(
-        (TopicId, UserIdentifier, text) => {
+        (TopicId, UserIdentifier, text, title) => {
             dispatch({
                 type: ActionTypes.CreateMessage,
                 payload: { UserIdentifier, TopicId, text },
             });
+            setInputValue((state) => ({
+                ...state,
+                [title]: '',
+            }));
         },
         [dispatch],
     );
@@ -43,7 +52,7 @@ export const Forum: FC = () => {
             [name]: value,
         }));
     };
-    console.log(inputValue);
+
     return (
         <Styled.Wrapper>
             <Title>Форум</Title>
@@ -80,6 +89,7 @@ export const Forum: FC = () => {
                                                   el.id,
                                                   user.id,
                                                   inputValue[el.title],
+                                                  el.title
                                               )
                                           }
                                       >
@@ -104,7 +114,7 @@ export const Forum: FC = () => {
                     <BaseButton
                         view="primaryFlat"
                         size="s"
-                        onClick={createTopic}
+                        onClick={() => createTopic(inputValue['newTopic'])}
                     >
                         Создать пост
                     </BaseButton>

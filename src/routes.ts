@@ -46,7 +46,6 @@ router.get('/get-topics', async (_, res) => {
                 const currentUser = users.filter(
                     (user) => user.identifier === mes.UserIdentifier,
                 )[0];
-                console.log(users, mes.UserIdentifier);
                 return { ...mes.dataValues, ...currentUser.dataValues };
             });
             return { id: topic.id, title: topic.title, messages: newMessages };

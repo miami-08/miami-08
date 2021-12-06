@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from 'store/userProfile/selectors';
 import ActionTypes from 'store/userProfile/actionTypes';
 
-import { BaseButton } from 'ui/components';
-
 import * as Styled from './styled';
 
 export const HomePage: FC = () => {
