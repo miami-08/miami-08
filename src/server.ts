@@ -28,9 +28,7 @@ function getWebpackMiddlewares(): RequestHandler[] {
 
 // подключение к БД необходимо для работы sequelize
 // eslint-disable-next-line func-names
-(async function () {
-    await dbConnect();
-}());
+dbConnect();
 
 const app = express();
 
