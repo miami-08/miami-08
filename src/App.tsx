@@ -10,6 +10,7 @@ import {
     selectUserPending,
 } from 'store/userProfile/selectors';
 import ActionTypes from 'store/auth/actionTypes';
+import ActionForumTypes from 'store/forum/actionTypes';
 
 import { SignUpWithData } from 'pages/SignUp';
 import { Leaderboard } from 'pages/Leaderboard';
@@ -35,6 +36,7 @@ const App: FC = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch({ type: ActionTypes.GetUser });
+        dispatch({ type: ActionForumTypes.GetTopics });
     }, [dispatch]);
 
     const isPending = useSelector(selectUserPending);

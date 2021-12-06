@@ -17,3 +17,9 @@ export async function createUser(
         identifier,
     });
 }
+
+export async function getAllUsers() {
+    return User.findAll({
+        attributes: ['firstName', 'secondName', 'identifier'],
+    });
+}

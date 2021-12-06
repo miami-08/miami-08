@@ -6,12 +6,14 @@ import { SagaMiddleware } from '@redux-saga/core';
 import { store } from 'client';
 
 import { TGameState } from './game/slice';
+import TForum from "types/TForum";
 
 export interface IState {
     router: RouterState;
     auth: TAuthStatus;
     user: TUserProfile;
     game: TGameState;
+    forum: TForum;
 }
 
 export type TAppStore = Store & {
