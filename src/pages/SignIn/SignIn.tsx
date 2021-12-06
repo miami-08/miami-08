@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import { FormikValues } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { TRootState } from 'store/types';
 import ActionTypes from 'store/auth/actionTypes';
+import { IState } from 'store/types';
 
 import { BaseButton } from 'ui/components';
 
@@ -29,7 +29,7 @@ const fields = [
 ];
 
 export const SignInWithData = () => {
-    const errorText = useSelector((state: TRootState) => state.auth.error);
+    const errorText = useSelector((state: IState) => state.auth.error);
 
     const dispatch = useDispatch();
 

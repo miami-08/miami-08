@@ -4,6 +4,7 @@ import { History } from 'history';
 
 import userReducer from 'store/userProfile/slice';
 import authReducer from 'store/auth/slice';
+import leaderboardReducer from 'store/leaderboard/slice';
 import gameReducer from 'store/game/slice';
 
 import { IState } from './types';
@@ -12,5 +13,6 @@ export default (history: History) => combineReducers<IState>({
     router: connectRouter(history),
     user: userReducer,
     auth: authReducer,
+    leaderboard: leaderboardReducer,
     game: gameReducer,
 });
