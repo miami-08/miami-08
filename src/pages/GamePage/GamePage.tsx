@@ -76,7 +76,7 @@ export const GamePage: FC = () => {
             )
             : [leaderInit];
 
-        if (score > currentUser[0]!.points) {
+        if (currentUser && currentUser[0] && score > currentUser[0]!.points) {
             dispatch({
                 type: ActionTypes.ChangeLeaderboard,
                 payload: requestData,
