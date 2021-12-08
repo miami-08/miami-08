@@ -1,12 +1,12 @@
 import { isServer } from 'store/rootStore';
 
-export const DISCRET_WIDTH_SIZE = 50;
+export const DISCRETE_WIDTH_SIZE = 50;
 
 export const PLAYER_RAD_MODIFIER = 0.9;
 
 export const GameConstants = {
     get PERFECT_ONE() {
-        return isServer ? 1 : window.innerWidth / DISCRET_WIDTH_SIZE;
+        return isServer ? 1 : window.innerWidth / DISCRETE_WIDTH_SIZE;
     },
     get PLAYER_DIAMETER() {
         return GameConstants.PERFECT_ONE * PLAYER_RAD_MODIFIER;
@@ -17,6 +17,8 @@ export const GameConstants = {
 export const LEFT_RIGHT_SPEED_BUST = GameConstants.PERFECT_ONE / 30;
 export const FADING_COEF = 0.95;
 export const MAX_PLAYER_SPEED = GameConstants.PERFECT_ONE / 4;
+
+export const GAMEPAD_MOVEMENT_THRESHOLD = 0.5;
 
 // jumping and falling
 export const JUMP_VELOCITY = GameConstants.PERFECT_ONE / 80;

@@ -36,16 +36,16 @@ router.post('/change-theme', async (req, res) => {
     updateUserThemeById(userTheme!.id, { theme });
     res.sendStatus(200);
 });
-
 router.get('/get-topics', async (_, res) => {
     const topics = await getTopics();
     const users = await getAllUsers();
     const topicsWithMessages = await Promise.all(
-        topics.map(async (topic) => {
+        topics.map(async (topic: any) => {
             const messages = await getMsgsByTopicId(topic.id);
-            const newMessages = messages.map((mes) => {
-                const currentUser = users.filter(
-                    (user) => user.identifier === mes.UserIdentifier,
+            const newMessages = messages.map((mes: any) => {
+                const currentUser: any = users.filter(
+                    // @eslint-ignore
+                    (user: any) => user.identifier === mes.UserIdentifier,
                 )[0];
                 return { ...mes.dataValues, ...currentUser.dataValues };
             });

@@ -56,10 +56,10 @@ export class BallMovementChecker {
         );
 
         if (
-            blockValue.toLowerCase() !== blockValue.toUpperCase()
-            && blockValue.toLowerCase() === blockValue
-            && Number.isNaN(parseInt(blockValue, 10))
-            && velY !== 0
+            blockValue.toLowerCase() !== blockValue.toUpperCase() &&
+            blockValue.toLowerCase() === blockValue &&
+            Number.isNaN(parseInt(blockValue, 10)) &&
+            velY !== 0
         ) {
             this.toggleCurrentBlockType(blockValue.toLocaleUpperCase());
 
@@ -80,8 +80,9 @@ export class BallMovementChecker {
             (x + GameConstants.PLAYER_DIAMETER) / GameConstants.PERFECT_ONE,
         );
 
-        const result = this.emptyBlocks.includes(this.map[yLvl1].charAt(leftBlockX))
-            && this.emptyBlocks.includes(this.map[yLvl1].charAt(rightBlockX));
+        const result =
+            this.emptyBlocks.includes(this.map[yLvl1].charAt(leftBlockX)) &&
+            this.emptyBlocks.includes(this.map[yLvl1].charAt(rightBlockX));
 
         return result;
     }
@@ -96,8 +97,9 @@ export class BallMovementChecker {
             (x + GameConstants.PLAYER_DIAMETER) / GameConstants.PERFECT_ONE,
         );
 
-        const result = this.emptyBlocks.includes(this.map[yLvl1].charAt(leftBlockX))
-            && this.emptyBlocks.includes(this.map[yLvl1].charAt(rightBlockX));
+        const result =
+            this.emptyBlocks.includes(this.map[yLvl1].charAt(leftBlockX)) &&
+            this.emptyBlocks.includes(this.map[yLvl1].charAt(rightBlockX));
 
         return result;
     }
@@ -139,11 +141,11 @@ export class BallMovementChecker {
 
         const ballCurrentBlockX = Math.floor(x / GameConstants.PERFECT_ONE);
 
-        const result = !this.emptyBlocks.includes(
+        const isStuck = !this.emptyBlocks.includes(
             this.map[ballCurrentBlockY].charAt(ballCurrentBlockX),
         );
 
-        return result;
+        return isStuck;
     }
 
     isBallCanGoRight(ballX: number, ballY: number): boolean {
@@ -153,10 +155,11 @@ export class BallMovementChecker {
             (y + GameConstants.PLAYER_DIAMETER / 3) / GameConstants.PERFECT_ONE,
         );
 
-        const rightBallX = Math.ceil(
-            (x + GameConstants.PLAYER_DIAMETER + 3)
-                    / GameConstants.PERFECT_ONE,
-        ) - 1;
+        const rightBallX =
+            Math.ceil(
+                (x + GameConstants.PLAYER_DIAMETER + 3) /
+                    GameConstants.PERFECT_ONE,
+            ) - 1;
 
         const result = this.emptyBlocks.includes(
             this.map[ballMiddleY].charAt(rightBallX),

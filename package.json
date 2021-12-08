@@ -10,7 +10,7 @@
     "lint": "npm-run-all prettier lint:*",
     "prepare": "husky install",
     "start:webpack": "webpack --mode=development --watch",
-    "start:server": "nodemon index.js --watch dist/server.js",
+    "start:server": "nodemon index.ts --watch dist/server.js",
     "clean": "rimraf dist"
   },
   "repository": {
