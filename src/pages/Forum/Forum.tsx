@@ -62,44 +62,46 @@ export const Forum: FC = () => {
             <Title>Форум</Title>
             {forumData
                 ? forumData.data.map((el: any) => (
-                    <div key={el.id}>
-                        <Styled.Category>{el.title}</Styled.Category>
-                        <Styled.Messages>
-                            {el.messages.map((message: any) => (
-                                <div key={message.id}>
-                                    <Styled.Name>
-                                        {`${message.secondName} ${message.firstName}`}
-                                    </Styled.Name>
-                                    <Styled.Text>{message.text}</Styled.Text>
-                                </div>
-                            ))}
-                        </Styled.Messages>
+                      <div key={el.id}>
+                          <Styled.Category>{el.title}</Styled.Category>
+                          <Styled.Messages>
+                              {el.messages.map((message: any) => (
+                                  <div key={message.id}>
+                                      <Styled.Name>
+                                          {`${message.secondName} ${message.firstName}`}
+                                      </Styled.Name>
+                                      <Styled.Text>{message.text}</Styled.Text>
+                                  </div>
+                              ))}
+                          </Styled.Messages>
 
-                        {user ? (
-                            <>
-                                <Input
-                                    type="text"
-                                    name={el.title}
-                                    value={inputValue[el.title]}
-                                    onChange={handleInputChange}
-                                    placeholder="Сообщение"
-                                />
-                                <div>
-                                    <BaseButton
-                                        onClick={() => createMessage(
-                                            el.id,
-                                            user.id,
-                                            inputValue[el.title],
-                                            el.title,
-                                        )}
-                                    >
+                          {user ? (
+                              <>
+                                  <Input
+                                      type="text"
+                                      name={el.title}
+                                      value={inputValue[el.title]}
+                                      onChange={handleInputChange}
+                                      placeholder="Сообщение"
+                                  />
+                                  <div>
+                                      <BaseButton
+                                          onClick={() =>
+                                              createMessage(
+                                                  el.id,
+                                                  user.id,
+                                                  inputValue[el.title],
+                                                  el.title,
+                                              )
+                                          }
+                                      >
                                           Отправить
-                                    </BaseButton>
-                                </div>
-                            </>
-                        ) : null}
-                    </div>
-                ))
+                                      </BaseButton>
+                                  </div>
+                              </>
+                          ) : null}
+                      </div>
+                  ))
                 : 'Нет тем'}
 
             {user ? (

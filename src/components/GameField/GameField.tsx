@@ -101,8 +101,8 @@ export const GameField: React.FC<IGameFieldProps> = ({
                         GameConstants.PERFECT_ONE * LVLs[lvlNumber].map.length,
                     )}px`,
                     width: `${Math.floor(
-                        GameConstants.PERFECT_ONE
-                            * LVLs[lvlNumber].map[0].length,
+                        GameConstants.PERFECT_ONE *
+                            LVLs[lvlNumber].map[0].length,
                     )}px`,
                     border: '1px solid #111E6C',
                 }}

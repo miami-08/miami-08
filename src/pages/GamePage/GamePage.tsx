@@ -72,8 +72,8 @@ export const GamePage: FC = () => {
         const leaderInit = {} as ILeadersProps;
         const currentUser = Array.isArray(leaderboard.leaderboardInfo)
             ? leaderboard.leaderboardInfo.filter(
-                (el) => user!.login === el!.name,
-            )
+                  (el) => user!.login === el!.name,
+              )
             : [leaderInit];
 
         if (currentUser && currentUser[0] && score > currentUser[0]!.points) {

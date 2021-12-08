@@ -20,9 +20,8 @@ router.post('/user-theme', (req, res) => {
 });
 
 router.post('/add-user', async (req, res) => {
-    const {
-        first_name, second_name, login, email, phone, identifier,
-    } = req.body;
+    const { first_name, second_name, login, email, phone, identifier } =
+        req.body;
 
     await createUser(first_name, second_name, login, email, phone, identifier);
     await createTheme('light', identifier);

@@ -18,7 +18,8 @@ class UserApi {
         axiosInstance.put(UserUrls.ChangeInfo, JSON.stringify(data));
     }
 
-    changeTheme = (data: string) => axiosApiInstance.post(UserUrls.ChangeTheme, JSON.stringify(data));
+    changeTheme = (data: string) =>
+        axiosApiInstance.post(UserUrls.ChangeTheme, JSON.stringify(data));
 }
 
 export const userApi = new UserApi();
