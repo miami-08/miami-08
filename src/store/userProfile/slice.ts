@@ -33,7 +33,8 @@ const userSlice = createSlice({
     },
 });
 
-export const { dataFetching, setUserData, dataFailed, resetUserData } =
-    userSlice.actions;
+export const {
+    dataFetching, setUserData, dataFailed, resetUserData,
+} = userSlice.actions;
 
 export default userSlice.reducer;

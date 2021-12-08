@@ -17,13 +17,13 @@ import {
     changeLeaderboardSaga,
     getLeaderboardSaga,
 } from 'store/leaderboard/sagas';
-
-import { updateGameProps } from './game/sagas';
 import {
     createMessageSaga,
     createTopicsSaga,
     getTopicsSaga,
 } from 'store/forum/sagas';
+
+import { updateGameProps } from './game/sagas';
 
 export default function* rootSaga() {
     yield all([

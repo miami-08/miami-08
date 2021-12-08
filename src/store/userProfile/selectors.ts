@@ -4,14 +4,15 @@ import { IState } from 'store/types';
 
 const userStateSelector = (state: IState) => state.user;
 
-export const selectCurrentUser = (state: IState) =>
-    userStateSelector(state).userInfo;
+export const selectCurrentUser = (state: IState) => userStateSelector(state).userInfo;
 
 export const selectUserProfileInfo = (state: IState): TUserInfo | null => {
     const user = selectCurrentUser(state);
 
     if (user !== null && typeof user !== 'undefined') {
-        const { avatar, id, login, ...rest } = user;
+        const {
+            avatar, id, login, ...rest
+        } = user;
 
         return rest;
     }
@@ -19,8 +20,6 @@ export const selectUserProfileInfo = (state: IState): TUserInfo | null => {
     return null;
 };
 
-export const selectUserPending = (state: IState) =>
-    userStateSelector(state)?.pending;
+export const selectUserPending = (state: IState) => userStateSelector(state)?.pending;
 
-export const selectLogInFailed = (state: IState) =>
-    userStateSelector(state)?.error;
+export const selectLogInFailed = (state: IState) => userStateSelector(state)?.error;

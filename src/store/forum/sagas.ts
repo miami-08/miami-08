@@ -13,7 +13,7 @@ function* requestGetForumData() {
         const response: TObjectLiteral = yield call(forumApi.getTopics);
         yield put(setForumData(response));
     } catch (e: any) {
-        const { reason = null } = e.response.data;
+        const { reason = null } = e?.response?.data;
         yield put(dataFailed(reason));
     }
 }
@@ -26,7 +26,7 @@ function* requestCreateTopic({ payload }: any) {
         yield call(forumApi.createTopic, payload);
         yield call(requestGetForumData);
     } catch (e: any) {
-        const { reason = null } = e.response.data;
+        const { reason = null } = e?.response?.data;
         yield put(dataFailed(reason));
     }
 }
@@ -39,7 +39,7 @@ function* requestCreateMessage({ payload }: any) {
         yield call(forumApi.createMessage, payload);
         yield call(requestGetForumData);
     } catch (e: any) {
-        const { reason = null } = e.response.data;
+        const { reason = null } = e?.response?.data;
         yield put(dataFailed(reason));
     }
 }
