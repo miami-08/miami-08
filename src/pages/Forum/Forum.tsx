@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ActionTypes from 'store/forum/actionTypes';
+import { TRootState } from 'store/types';
+import { selectCurrentUser } from 'store/userProfile/selectors';
 
 import { Title } from 'ui/components/Title';
 import { BaseButton, Input } from 'ui/components';
 
 import * as Styled from './styled';
-import { TRootState } from 'store/types';
-import { selectCurrentUser } from 'store/userProfile/selectors';
 
 export const Forum: FC = () => {
     const [inputValue, setInputValue] = useState({} as any);
@@ -24,7 +24,7 @@ export const Forum: FC = () => {
                 type: ActionTypes.CreateTopic,
                 payload: { title },
             });
-            setInputValue((state) => ({
+            setInputValue((state: any) => ({
                 ...state,
                 newTopic: '',
             }));
@@ -33,12 +33,13 @@ export const Forum: FC = () => {
     );
 
     const createMessage = useCallback(
-        (TopicId, UserIdentifier, text, title) => {
+        // eslint-disable-next-line max-params
+        (TopicId, UserIdentifier, text, title): any => {
             dispatch({
                 type: ActionTypes.CreateMessage,
                 payload: { UserIdentifier, TopicId, text },
             });
-            setInputValue((state) => ({
+            setInputValue((state: any) => ({
                 ...state,
                 [title]: '',
             }));
@@ -47,10 +48,10 @@ export const Forum: FC = () => {
     );
 
     const handleInputChange = (e) => {
-        const value = e.target.value;
-        const name = e.target.name;
+        const { value } = e.target;
+        const { name } = e.target;
 
-        setInputValue((state) => ({
+        setInputValue((state: any) => ({
             ...state,
             [name]: value,
         }));
@@ -60,64 +61,60 @@ export const Forum: FC = () => {
         <Styled.Wrapper>
             <Title>Форум</Title>
             {forumData
-                ? forumData.data.map((el) => (
-                      <div key={el.id}>
-                          <Styled.Category>{el.title}</Styled.Category>
-                          <Styled.Messages>
-                              {el.messages.map((message) => (
-                                  <div key={message.id}>
-                                      <Styled.Name>
-                                          {message.secondName +
-                                              ' ' +
-                                              message.firstName}
-                                      </Styled.Name>
-                                      <Styled.Text>{message.text}</Styled.Text>
-                                  </div>
-                              ))}
-                          </Styled.Messages>
+                ? forumData.data.map((el: any) => (
+                    <div key={el.id}>
+                        <Styled.Category>{el.title}</Styled.Category>
+                        <Styled.Messages>
+                            {el.messages.map((message: any) => (
+                                <div key={message.id}>
+                                    <Styled.Name>
+                                        {`${message.secondName} ${message.firstName}`}
+                                    </Styled.Name>
+                                    <Styled.Text>{message.text}</Styled.Text>
+                                </div>
+                            ))}
+                        </Styled.Messages>
 
-                          {user ? (
-                              <>
-                                  <Input
-                                      type="text"
-                                      name={el.title}
-                                      value={inputValue[el.title]}
-                                      onChange={handleInputChange}
-                                      placeholder={'Сообщение'}
-                                  />
-                                  <div>
-                                      <BaseButton
-                                          onClick={() =>
-                                              createMessage(
-                                                  el.id,
-                                                  user.id,
-                                                  inputValue[el.title],
-                                                  el.title,
-                                              )
-                                          }
-                                      >
+                        {user ? (
+                            <>
+                                <Input
+                                    type="text"
+                                    name={el.title}
+                                    value={inputValue[el.title]}
+                                    onChange={handleInputChange}
+                                    placeholder="Сообщение"
+                                />
+                                <div>
+                                    <BaseButton
+                                        onClick={() => createMessage(
+                                            el.id,
+                                            user.id,
+                                            inputValue[el.title],
+                                            el.title,
+                                        )}
+                                    >
                                           Отправить
-                                      </BaseButton>
-                                  </div>
-                              </>
-                          ) : null}
-                      </div>
-                  ))
+                                    </BaseButton>
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
+                ))
                 : 'Нет тем'}
 
             {user ? (
                 <>
                     <h5>Новый пост</h5>
                     <input
-                        value={inputValue['newTopic']}
+                        value={inputValue.newTopic}
                         name="newTopic"
-                        placeholder={'Новая тема'}
+                        placeholder="Новая тема"
                         onChange={handleInputChange}
                     />
                     <BaseButton
                         view="primaryFlat"
                         size="s"
-                        onClick={() => createTopic(inputValue['newTopic'])}
+                        onClick={() => createTopic(inputValue.newTopic)}
                     >
                         Создать пост
                     </BaseButton>

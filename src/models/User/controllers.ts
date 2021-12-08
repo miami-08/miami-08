@@ -1,5 +1,6 @@
 import { User } from 'initSequelize';
 
+// eslint-disable-next-line max-params
 export async function createUser(
     firstName: string,
     secondName: string,

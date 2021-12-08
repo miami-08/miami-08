@@ -61,7 +61,9 @@ export class ObjectsDrawer {
     }
 
     public drawBackground(canvasSides: ISides): void {
-        const { top, right, bottom, left } = canvasSides;
+        const {
+            top, right, bottom, left,
+        } = canvasSides;
 
         const height = bottom - top;
         const width = right - left;
@@ -132,80 +134,80 @@ export class ObjectsDrawer {
                 const block = lvl[j];
 
                 switch (block) {
-                    case '0':
-                        break;
-                    case '1':
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                        );
-                        break;
-                    case 'a': {
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                            'yellow',
-                            'darkgray',
-                            reachedKeys.a ? 'orange' : undefined,
-                        );
-                        break;
-                    }
-                    case 'A': {
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                            'yellow',
-                            reachedKeys.a ? 'yellow' : 'gray',
-                        );
-                        break;
-                    }
-                    case 'b': {
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                            'tomato',
-                            'gray',
-                            reachedKeys.b ? 'purple' : undefined,
-                        );
-                        break;
-                    }
-                    case 'B': {
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                            'tomato',
-                            reachedKeys.b ? 'tomato' : 'purple',
-                        );
-                        break;
-                    }
-                    case 'c': {
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                            '#90ee90',
-                            'gray',
-                            reachedKeys.c ? 'green' : undefined,
-                        );
-                        break;
-                    }
-                    case 'C': {
-                        this.drawBlock(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                            '#90ee90',
-                            reachedKeys.c ? '#90ee90' : 'green',
-                        );
-                        break;
-                    }
-                    case '+':
-                    case '-':
-                        this.drawGate(
-                            j * GameConstants.PERFECT_ONE,
-                            i * GameConstants.PERFECT_ONE,
-                        );
-                        break;
-                    default:
-                        break;
+                case '0':
+                    break;
+                case '1':
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                    );
+                    break;
+                case 'a': {
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                        'yellow',
+                        'darkgray',
+                        reachedKeys.a ? 'orange' : undefined,
+                    );
+                    break;
+                }
+                case 'A': {
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                        'yellow',
+                        reachedKeys.a ? 'yellow' : 'gray',
+                    );
+                    break;
+                }
+                case 'b': {
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                        'tomato',
+                        'gray',
+                        reachedKeys.b ? 'purple' : undefined,
+                    );
+                    break;
+                }
+                case 'B': {
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                        'tomato',
+                        reachedKeys.b ? 'tomato' : 'purple',
+                    );
+                    break;
+                }
+                case 'c': {
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                        '#90ee90',
+                        'gray',
+                        reachedKeys.c ? 'green' : undefined,
+                    );
+                    break;
+                }
+                case 'C': {
+                    this.drawBlock(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                        '#90ee90',
+                        reachedKeys.c ? '#90ee90' : 'green',
+                    );
+                    break;
+                }
+                case '+':
+                case '-':
+                    this.drawGate(
+                        j * GameConstants.PERFECT_ONE,
+                        i * GameConstants.PERFECT_ONE,
+                    );
+                    break;
+                default:
+                    break;
                 }
             }
         }

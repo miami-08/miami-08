@@ -1,5 +1,5 @@
 import path from 'path';
-var bodyParser = require('body-parser');
+
 import express, { RequestHandler } from 'express';
 import 'babel-polyfill';
 import webpack from 'webpack';
@@ -11,6 +11,8 @@ import { dbConnect } from 'initSequelize';
 import config from '../webpack/client.config';
 
 import serverRenderMiddleware from './server-render-middleware';
+
+const bodyParser = require('body-parser');
 
 function getWebpackMiddlewares(): RequestHandler[] {
     const compiler = webpack({ ...config, mode: 'development' });
