@@ -5,9 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hot } from 'react-hot-loader/root';
 import { RoutePath } from 'RoutePath';
 
-import { selectUserPending } from 'store/userProfile/selectors';
+import {
+    selectCurrentUser,
+    selectUserPending,
+} from 'store/userProfile/selectors';
+import ActionTypes from 'store/auth/actionTypes';
+import ActionForumTypes from 'store/forum/actionTypes';
 import ActionTypesLeaderboard from 'store/leaderboard/actionTypes';
-import ActionTypesUser from 'store/auth/actionTypes';
 
 import { SignUpWithData } from 'pages/SignUp';
 import { Leaderboard } from 'pages/Leaderboard';
@@ -32,14 +36,17 @@ const App: FC = () => {
 
     const dispatch = useDispatch();
 
-    const isPending = useSelector(selectUserPending);
     useEffect(() => {
-        dispatch({ type: ActionTypesUser.GetUser });
+        dispatch({ type: ActionTypes.GetUser });
+        dispatch({ type: ActionForumTypes.GetTopics });
         dispatch({ type: ActionTypesLeaderboard.GetLeaderboard });
     }, [dispatch]);
 
+    const isPending = useSelector(selectUserPending);
+    const user = useSelector(selectCurrentUser);
+
     return (
-        <ThemeProvider theme={themes.light}>
+        <ThemeProvider theme={user ? themes[user.theme] : themes.light}>
             <GlobalStyles />
             <ErrorBoundary>
                 <div className="app">

@@ -25,6 +25,27 @@ export const MainTitle = styled(Title)`
     margin-bottom: 100px;
 `;
 
+export const ThemeWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const Button = styled(BaseButton)`
+    background-color: white;
+    color: black;
+    margin: 10px;
+
+    &:hover {
+        background-color: transparent;
+        color: black;
+    }
+
+    &:disabled {
+        background-color: transparent;
+        color: ${colors.gray};
+    }
+`;
+
 export const MenuButton = styled(BaseButton)`
     width: 200px;
     text-decoration: none;

@@ -1,11 +1,12 @@
 /* eslint-disable class-methods-use-this */
 import TObjectLiteral from 'types/TObjectLiteral';
-import axiosInstance from 'api/axios';
+import axiosInstance, { axiosApiInstance } from 'api/axios';
 
 enum UserUrls {
     ChangePassword = 'user/password',
     ChangeInfo = 'user/profile',
     GetUser = 'user/',
+    ChangeTheme = 'change-theme/',
 }
 
 class UserApi {
@@ -17,9 +18,8 @@ class UserApi {
         axiosInstance.put(UserUrls.ChangeInfo, JSON.stringify(data));
     }
 
-    getUser(id: number) {
-        axiosInstance.get(`${UserUrls.GetUser}${id}`);
-    }
+    changeTheme = (data: string) =>
+        axiosApiInstance.post(UserUrls.ChangeTheme, JSON.stringify(data));
 }
 
 export const userApi = new UserApi();

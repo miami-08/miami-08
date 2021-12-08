@@ -1,5 +1,5 @@
 import TObjectLiteral from 'types/TObjectLiteral';
-import axiosInstance from 'api/axios';
+import axiosInstance, { axiosApiInstance } from 'api/axios';
 
 enum AuthUrls {
     SignUp = 'auth/signup',
@@ -7,27 +7,39 @@ enum AuthUrls {
     LogOut = 'auth/logout',
     GetUser = 'auth/user',
     GetOauthServiceId = 'oauth/yandex/service-id',
+    UserTheme = 'user-theme/',
+    AddUserToDb = 'add-user/',
 }
 
 class AuthApi {
-    signUp = (data: TObjectLiteral) => axiosInstance.post(AuthUrls.SignUp, JSON.stringify(data));
+    signUp = (data: TObjectLiteral) =>
+        axiosInstance.post(AuthUrls.SignUp, JSON.stringify(data));
 
-    signIn = (data: TObjectLiteral) => axiosInstance.post(AuthUrls.SignIn, JSON.stringify(data));
+    signIn = (data: TObjectLiteral) =>
+        axiosInstance.post(AuthUrls.SignIn, JSON.stringify(data));
 
     logOut = () => axiosInstance.post(AuthUrls.LogOut);
 
     getCurrentUser = () => axiosInstance.get(AuthUrls.GetUser);
 
-    getOAuthServiceId = () => axiosInstance.get(AuthUrls.GetOauthServiceId, {
-        params: {
-            redirect_uri: process.env.REDIRECT_URI,
-        },
-    });
+    getCurrentUserTheme = (userid: number) =>
+        axiosApiInstance.post(AuthUrls.UserTheme, { userid });
 
-    getToken = (code: string) => axiosInstance.post('/oauth/yandex', {
-        redirect_uri: process.env.REDIRECT_URI,
-        code,
-    });
+    addCurrentUserToDb = (data: TObjectLiteral) =>
+        axiosApiInstance.post(AuthUrls.AddUserToDb, JSON.stringify(data));
+
+    getOAuthServiceId = () =>
+        axiosInstance.get(AuthUrls.GetOauthServiceId, {
+            params: {
+                redirect_uri: process.env.REDIRECT_URI,
+            },
+        });
+
+    getToken = (code: string) =>
+        axiosInstance.post('/oauth/yandex', {
+            redirect_uri: process.env.REDIRECT_URI,
+            code,
+        });
 }
 
 const authApi = new AuthApi();

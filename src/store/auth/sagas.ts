@@ -53,7 +53,19 @@ function* currentUserRequest() {
     try {
         const response: TObjectLiteral = yield call(AuthApi.getCurrentUser);
 
-        yield put(setUserData(mapApiUserToIUser(response.data)));
+        const theme: TObjectLiteral = yield call(
+            AuthApi.getCurrentUserTheme,
+            response.data.id,
+        );
+
+        yield put(
+            setUserData(
+                mapApiUserToIUser({
+                    ...response.data,
+                    theme: theme.data.theme,
+                }),
+            ),
+        );
     } catch (e: any) {
         const { reason = null } = e.response.data;
 
@@ -70,11 +82,15 @@ function* signUpRequest(action: any) {
     const { payload } = action;
 
     try {
-        yield call(AuthApi.signUp, payload);
-
+        const response: TObjectLiteral = yield call(AuthApi.signUp, payload);
         yield put(signUpLoaded());
 
         yield call(currentUserRequest);
+        yield call(AuthApi.addCurrentUserToDb, {
+            ...payload,
+            theme: 'light',
+            identifier: response.data.id,
+        });
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {

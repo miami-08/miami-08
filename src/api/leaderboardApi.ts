@@ -7,10 +7,12 @@ const requestData = {
     limit: 10,
 };
 
-export const teamLeaderboard = () => axiosInstance.post('leaderboard/all', JSON.stringify(requestData), {
-    withCredentials: true,
-});
+export const teamLeaderboard = () =>
+    axiosInstance.post('leaderboard/all', JSON.stringify(requestData), {
+        withCredentials: true,
+    });
 
-export const addLeaderboard = (data: TObjectLiteral) => axiosInstance.post('/leaderboard', JSON.stringify(data), {
-    withCredentials: true,
-});
+export const addLeaderboard = (data: TObjectLiteral) =>
+    axiosInstance.post('/leaderboard', JSON.stringify(data), {
+        withCredentials: true,
+    });

@@ -47,3 +47,15 @@ function* requestChangePassword({ payload }: any) {
 export function* changePasswordSaga() {
     yield takeEvery(ActionTypes.ChangePassword, requestChangePassword);
 }
+
+function* requestChangeTheme({ payload }: any) {
+    try {
+        yield call(userApi.changeTheme, payload);
+    } catch (e: any) {
+        const { reason = null } = e.response.data;
+        yield put(dataFailed(reason));
+    }
+}
+export function* changeThemeSaga() {
+    yield takeEvery(ActionTypes.ChangeTheme, requestChangeTheme);
+}

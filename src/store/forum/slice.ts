@@ -1,15 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import TLeaderBoard from 'types/TLeaderBoard';
+import TForum from 'types/TForum';
 
-export const initialState: TLeaderBoard = {
-    leaderboardInfo: [],
+export const initialState: TForum = {
+    forumData: null,
     pending: false,
     error: null,
 };
 
-const leaderboardSlice = createSlice({
-    name: 'leaderboard',
+const forumSlice = createSlice({
+    name: 'forum',
     initialState,
     reducers: {
         dataFetching(state) {
@@ -20,15 +20,14 @@ const leaderboardSlice = createSlice({
             state.pending = false;
             state.error = action.payload;
         },
-        setLeaderboard(state, action) {
+        setForumData(state, action) {
             state.pending = false;
             state.error = null;
-            state.leaderboardInfo = action.payload;
+            state.forumData = action.payload;
         },
     },
 });
 
-export const { dataFetching, setLeaderboard, dataFailed } =
-    leaderboardSlice.actions;
+export const { dataFetching, setForumData, dataFailed } = forumSlice.actions;
 
-export default leaderboardSlice.reducer;
+export default forumSlice.reducer;

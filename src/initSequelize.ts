@@ -1,6 +1,9 @@
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 
-import { userModel } from 'models/User/User';
+import { userThemeModel } from 'models/UserTheme/model';
+import { userModel } from 'models/User/model';
+import { messageModel } from 'models/Message/model';
+import { topicModel } from 'models/Topic/model';
 
 const sequelizeOptions: SequelizeOptions = {
     host: process.env.POSTGRES_HOST,
@@ -13,7 +16,18 @@ const sequelizeOptions: SequelizeOptions = {
 
 export const sequelize = new Sequelize(sequelizeOptions);
 
+export const Topic = sequelize.define('Topic', topicModel, {});
+
+export const Message = sequelize.define('Message', messageModel, {});
+
 export const User = sequelize.define('User', userModel, {});
+export const UserTheme = sequelize.define('UserTheme', userThemeModel, {});
+UserTheme.belongsTo(User);
+User.hasMany(Message);
+Message.belongsTo(User);
+
+Topic.hasMany(Message);
+Message.belongsTo(Topic);
 
 export async function dbConnect() {
     try {

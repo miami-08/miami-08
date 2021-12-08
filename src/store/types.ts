@@ -7,12 +7,14 @@ import { store } from 'client';
 import TLeaderBoard from 'types/TLeaderBoard';
 
 import { TGameState } from './game/slice';
+import TForum from 'types/TForum';
 
 export interface IState {
     router: RouterState;
     auth: TAuthStatus;
     user: TUserProfile;
     game: TGameState;
+    forum: TForum;
     leaderboard: TLeaderBoard;
 }
 
@@ -22,5 +24,3 @@ export type TAppStore = Store & {
 };
 
 export type TRootState = ReturnType<typeof store.getState>;
-
-export type TStoreDispatch = typeof store.dispatch;

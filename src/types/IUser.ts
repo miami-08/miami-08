@@ -7,6 +7,7 @@ export interface IApiUser {
     avatar: string;
     email: string;
     phone: string;
+    theme: string;
 }
 
 export interface IUser {
@@ -18,4 +19,5 @@ export interface IUser {
     avatar: string;
     email: string;
     phone: string;
+    theme: string;
 }

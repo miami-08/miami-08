@@ -9,6 +9,7 @@ export function mapApiUserToIUser({
     avatar,
     email,
     phone,
+    theme,
 }: IApiUser): IUser {
     return {
         id,
@@ -19,5 +20,6 @@ export function mapApiUserToIUser({
         avatar,
         email,
         phone,
+        theme,
     };
 }

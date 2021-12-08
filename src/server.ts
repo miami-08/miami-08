@@ -1,11 +1,12 @@
 import path from 'path';
-
+var bodyParser = require('body-parser');
 import express, { RequestHandler } from 'express';
 import 'babel-polyfill';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import routes from 'routes';
+import { dbConnect } from 'initSequelize';
 
 import config from '../webpack/client.config';
 
@@ -25,9 +26,10 @@ function getWebpackMiddlewares(): RequestHandler[] {
     ];
 }
 
-const app = express();
+dbConnect();
 
-app.use('/api', routes);
+const app = express();
+app.use(bodyParser.json()).use('/api', routes);
 
 // Отдаём статику приложения
 app.use(express.static(path.resolve(__dirname, '../dist')));

@@ -1,27 +1,69 @@
 import * as express from 'express';
 
-import { dispatchOrmUserActions } from 'models/User/controllers';
+import {
+    createTheme,
+    findTheme,
+    updateUserThemeById,
+} from 'models/UserTheme/controllers';
+import { createUser, getAllUsers } from 'models/User/controllers';
+import { createMsg, getMsgsByTopicId } from 'models/Message/controllers';
+import { createTopic, getTopics } from 'models/Topic/controllers';
 
 const router = express.Router();
 
-router.get('/orm-actions', (_, res) => {
-    // это пример использования модельки. потом можно впихивать это в какие угодно файлы
-    // удалю после апрува пр, когда скажете, что всё ок и всем всё понятно :>
-    // и да, я помню, что мы договаривались в качестве примера ничего не писать
-    // но тут, мне показалось, что надо
+router.post('/user-theme', (req, res) => {
+    const { userid } = req.body;
 
-    // это пример использования модельки. потом можно впихивать это в какие угодно файлы
-    // удалю после апрува пр, когда скажете, что всё ок и всем всё понятно :>
-    // и да, я помню, что мы договаривались в качестве примера ничего не писать
-    // но тут, мне показалось, что надо
-
-    dispatchOrmUserActions();
-
-    res.send("orm-actions' response");
+    findTheme(userid.toString())
+        .then((el) => res.json(el))
+        .catch(() => res.sendStatus(400));
 });
 
-router.get('/topics', (_, res) => {
-    res.send('topics');
+router.post('/add-user', async (req, res) => {
+    const { first_name, second_name, login, email, phone, identifier } =
+        req.body;
+
+    await createUser(first_name, second_name, login, email, phone, identifier);
+    await createTheme('light', identifier);
+
+    await res.sendStatus(200);
+});
+
+router.post('/change-theme', async (req, res) => {
+    const { theme, id } = req.body;
+    const userTheme = await findTheme(id.toString());
+    updateUserThemeById(userTheme!.id, { theme });
+    res.sendStatus(200);
+});
+
+router.get('/get-topics', async (_, res) => {
+    const topics = await getTopics();
+    const users = await getAllUsers();
+    const topicsWithMessages = await Promise.all(
+        topics.map(async (topic) => {
+            const messages = await getMsgsByTopicId(topic.id);
+            const newMessages = messages.map((mes) => {
+                const currentUser = users.filter(
+                    (user) => user.identifier === mes.UserIdentifier,
+                )[0];
+                return { ...mes.dataValues, ...currentUser.dataValues };
+            });
+            return { id: topic.id, title: topic.title, messages: newMessages };
+        }),
+    );
+    res.json(topicsWithMessages);
+});
+
+router.post('/create-topic', (req, res) => {
+    const { title = 'hello' } = req.body;
+    createTopic(title);
+    res.sendStatus(200);
+});
+
+router.post('/create-message', async (req, res) => {
+    const { text = '', UserIdentifier = 0, TopicId = 0 } = req.body;
+    createMsg(text, UserIdentifier, TopicId);
+    res.sendStatus(200);
 });
 
 export default router;

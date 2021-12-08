@@ -1,39 +1,128 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { fakeElements } from 'components/Forum/fakeData';
-import { TableBody } from 'components/Forum/TableBody';
-import { TableHead } from 'components/Forum/TableHead';
-import { TextEditor } from 'components/Forum/TextEditor';
+import ActionTypes from 'store/forum/actionTypes';
 
 import { Title } from 'ui/components/Title';
-import { BaseButton } from 'ui/components';
+import { BaseButton, Input } from 'ui/components';
 
 import * as Styled from './styled';
+import { TRootState } from 'store/types';
+import { selectCurrentUser } from 'store/userProfile/selectors';
 
 export const Forum: FC = () => {
-    const [isOpen, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState({} as any);
+    const dispatch = useDispatch();
+    const user = useSelector(selectCurrentUser);
+    const forumData = useSelector((state: TRootState) => state.forum.forumData);
+
+    console.log(forumData);
+    const createTopic = useCallback(
+        (title) => {
+            dispatch({
+                type: ActionTypes.CreateTopic,
+                payload: { title },
+            });
+            setInputValue((state) => ({
+                ...state,
+                newTopic: '',
+            }));
+        },
+        [dispatch],
+    );
+
+    const createMessage = useCallback(
+        (TopicId, UserIdentifier, text, title) => {
+            dispatch({
+                type: ActionTypes.CreateMessage,
+                payload: { UserIdentifier, TopicId, text },
+            });
+            setInputValue((state) => ({
+                ...state,
+                [title]: '',
+            }));
+        },
+        [dispatch],
+    );
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        const name = e.target.name;
+
+        setInputValue((state) => ({
+            ...state,
+            [name]: value,
+        }));
+    };
+
     return (
         <Styled.Wrapper>
             <Title>Форум</Title>
+            {forumData
+                ? forumData.data.map((el) => (
+                      <div key={el.id}>
+                          <Styled.Category>{el.title}</Styled.Category>
+                          <Styled.Messages>
+                              {el.messages.map((message) => (
+                                  <div key={message.id}>
+                                      <Styled.Name>
+                                          {message.secondName +
+                                              ' ' +
+                                              message.firstName}
+                                      </Styled.Name>
+                                      <Styled.Text>{message.text}</Styled.Text>
+                                  </div>
+                              ))}
+                          </Styled.Messages>
 
-            {fakeElements.map((el) => (
+                          {user ? (
+                              <>
+                                  <Input
+                                      type="text"
+                                      name={el.title}
+                                      value={inputValue[el.title]}
+                                      onChange={handleInputChange}
+                                      placeholder={'Сообщение'}
+                                  />
+                                  <div>
+                                      <BaseButton
+                                          onClick={() =>
+                                              createMessage(
+                                                  el.id,
+                                                  user.id,
+                                                  inputValue[el.title],
+                                                  el.title,
+                                              )
+                                          }
+                                      >
+                                          Отправить
+                                      </BaseButton>
+                                  </div>
+                              </>
+                          ) : null}
+                      </div>
+                  ))
+                : 'Нет тем'}
+
+            {user ? (
                 <>
-                    <Styled.Category>{el.title}</Styled.Category>
-                    <Styled.TableForum>
-                        <TableHead />
-                        <TableBody elements={el.data} />
-                    </Styled.TableForum>
+                    <h5>Новый пост</h5>
+                    <input
+                        value={inputValue['newTopic']}
+                        name="newTopic"
+                        placeholder={'Новая тема'}
+                        onChange={handleInputChange}
+                    />
+                    <BaseButton
+                        view="primaryFlat"
+                        size="s"
+                        onClick={() => createTopic(inputValue['newTopic'])}
+                    >
+                        Создать пост
+                    </BaseButton>
                 </>
-            ))}
-            {isOpen ? <TextEditor /> : null}
-            <BaseButton
-                view="primaryFlat"
-                size="s"
-                onClick={() => setOpen(!isOpen)}
-            >
-                Новый пост
-            </BaseButton>
+            ) : null}
 
             <BaseButton view="primaryFlat" size="s">
                 <Link to="/"> Домой </Link>
