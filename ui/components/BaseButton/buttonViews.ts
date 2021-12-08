@@ -110,7 +110,7 @@ export const buttonViews = {
         },
         primaryFlat: {
             backgroundColor: 'transparent',
-            color: colors.primary,
+            color: colors.darkBlue,
             hover: {
                 color: colors.white,
                 backgroundColor: colors.danger,

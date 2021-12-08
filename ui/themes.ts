@@ -20,8 +20,8 @@ export const themes = {
     },
     sea: {
         colors: {
-            body: colors.lightPrimary,
-            text: colors.primary,
+            body: `radial-gradient(white, ${colors.primary})`,
+            text: colors.darkBlue,
             textInversion: colors.white,
             buttons: buttonViews.sea,
             inputs: inputViews.sea,
