@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { colors } from 'ui/colors';
 
 export const StyledTr = styled.tr`
-    border-bottom: 1pt solid ${colors.lightGray};
     font-size: 14px;
     height: 40px;
 

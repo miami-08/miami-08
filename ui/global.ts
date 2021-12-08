@@ -7,6 +7,7 @@ export const GlobalStyles = createGlobalStyle<ITheme>`
     padding: 0;
     color: ${({ theme }) => theme.colors.text};
     background: ${({ theme }) => theme.colors.body};
+    background-repeat: 'repeat-y';
     margin: 0;
     font-family: 'Roboto', sans-serif;
     
