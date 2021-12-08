@@ -28,6 +28,7 @@ const leaderboardSlice = createSlice({
     },
 });
 
-export const { dataFetching, setLeaderboard, dataFailed } = leaderboardSlice.actions;
+export const { dataFetching, setLeaderboard, dataFailed } =
+    leaderboardSlice.actions;
 
 export default leaderboardSlice.reducer;

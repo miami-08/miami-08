@@ -12,28 +12,34 @@ enum AuthUrls {
 }
 
 class AuthApi {
-    signUp = (data: TObjectLiteral) => axiosInstance.post(AuthUrls.SignUp, JSON.stringify(data));
+    signUp = (data: TObjectLiteral) =>
+        axiosInstance.post(AuthUrls.SignUp, JSON.stringify(data));
 
-    signIn = (data: TObjectLiteral) => axiosInstance.post(AuthUrls.SignIn, JSON.stringify(data));
+    signIn = (data: TObjectLiteral) =>
+        axiosInstance.post(AuthUrls.SignIn, JSON.stringify(data));
 
     logOut = () => axiosInstance.post(AuthUrls.LogOut);
 
     getCurrentUser = () => axiosInstance.get(AuthUrls.GetUser);
 
-    getCurrentUserTheme = (userid: number) => axiosApiInstance.post(AuthUrls.UserTheme, { userid });
+    getCurrentUserTheme = (userid: number) =>
+        axiosApiInstance.post(AuthUrls.UserTheme, { userid });
 
-    addCurrentUserToDb = (data: TObjectLiteral) => axiosApiInstance.post(AuthUrls.AddUserToDb, JSON.stringify(data));
+    addCurrentUserToDb = (data: TObjectLiteral) =>
+        axiosApiInstance.post(AuthUrls.AddUserToDb, JSON.stringify(data));
 
-    getOAuthServiceId = () => axiosInstance.get(AuthUrls.GetOauthServiceId, {
-        params: {
+    getOAuthServiceId = () =>
+        axiosInstance.get(AuthUrls.GetOauthServiceId, {
+            params: {
+                redirect_uri: process.env.REDIRECT_URI,
+            },
+        });
+
+    getToken = (code: string) =>
+        axiosInstance.post('/oauth/yandex', {
             redirect_uri: process.env.REDIRECT_URI,
-        },
-    });
-
-    getToken = (code: string) => axiosInstance.post('/oauth/yandex', {
-        redirect_uri: process.env.REDIRECT_URI,
-        code,
-    });
+            code,
+        });
 }
 
 const authApi = new AuthApi();

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import TUserProfile from 'types/TUserProfile';
 
 export const initialState: TUserProfile = {
-    userInfo: null,
+    userInfo: { id: 0, firstName: '', secondName: '', email: '', login: '', avatar: '', theme: 'light', displayName: '', phone: '' },
     pending: false,
     error: null,
 };
@@ -33,8 +33,7 @@ const userSlice = createSlice({
     },
 });
 
-export const {
-    dataFetching, setUserData, dataFailed, resetUserData,
-} = userSlice.actions;
+export const { dataFetching, setUserData, dataFailed, resetUserData } =
+    userSlice.actions;
 
 export default userSlice.reducer;

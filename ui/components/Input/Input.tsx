@@ -47,7 +47,8 @@ export const StyledInput = styled.input<ITheme>`
     }
 
     &:focus {
-        border-bottom-color: ${({ theme }) => theme.colors.inputs.borderHoverColor};
+        border-bottom-color: ${({ theme }) =>
+            theme.colors.inputs.borderHoverColor};
 
         & + label {
             font-size: 12px;
@@ -63,9 +64,7 @@ export const StyledError = styled.div`
 
 export const Input = React.forwardRef<HTMLInputElement, TStyledInput>(
     ({ ...props }, ref) => {
-        const {
-            children, label = '', errorText, name, ...rest
-        } = props;
+        const { children, label = '', errorText, name, ...rest } = props;
         return (
             <StyledInputWrapper>
                 <StyledInput
