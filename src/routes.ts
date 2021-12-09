@@ -20,27 +20,24 @@ router.post('/user-theme', (req, res) => {
 
 router.post('/add-user', async (req, res) => {
     const {
-        first_name,
-        second_name,
-        login, email,
-        phone,
-        password,
-        theme,
+        first_name, second_name, login, email, phone, password, theme,
     } = req.body;
 
     createUser(first_name, second_name, login, email, phone, password, theme)
         .then((user: any) => {
             const {
-                id: Id, login: Login, first_name: firstName, second_name: secondName, email: Email, phone: Phone,
+                id,
+                firstName,
+                secondName,
             } = user;
 
             const responseUser = {
-                id: Id,
-                login: Login,
-                first_name: firstName,
-                second_name: secondName,
-                email: Email,
-                phone: Phone,
+                id,
+                login,
+                firstName,
+                secondName,
+                email,
+                phone,
             };
 
             res.send(responseUser);
@@ -118,7 +115,10 @@ router.post('/create-message', (req, res) => {
                 );
 
                 if (sender) {
-                    return { ...letter, dataValues: { ...letter.dataValues, sender } };
+                    return {
+                        ...letter,
+                        dataValues: { ...letter.dataValues, sender },
+                    };
                 }
 
                 return letter;
