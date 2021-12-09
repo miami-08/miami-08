@@ -1,8 +1,8 @@
 # 08-miami
 
 ## 🔴🕳
-[Ссылка на развёрнутый в Я.Облаке проект](https://miami-bounce-08.ya-praktikum.tech)
-[Ссылка на Heroku](https://miami-08.herokuapp.com)
+- [Ссылка на развёрнутый в Я.Облаке проект](https://miami-bounce-08.ya-praktikum.tech)
+- [Ссылка на Heroku](https://miami-08.herokuapp.com)
 
 ## 📬 Как оформлять PR
 
