@@ -4,4 +4,5 @@ export const userLabels = {
     email: 'Почта',
     displayName: 'Отображаемое имя',
     phone: 'Телефонный номер',
+    login: 'Логин',
 };

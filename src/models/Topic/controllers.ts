@@ -1,7 +1,7 @@
 import { Topic } from 'initSequelize';
 
-export function createTopic(title: string, topicid: number) {
-    return Topic.create({ title, topicid });
+export function createTopic(title: string) {
+    return Topic.create({ title });
 }
 
 export function getTopics() {

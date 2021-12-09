@@ -10,13 +10,22 @@ enum ForumUrls {
 }
 
 class ForumApi {
-    getTopics = () => axiosApiInstance.get(ForumUrls.GetTopics).then((i) => i.data).then((i) => i.data);
+    getTopics = () => axiosApiInstance
+        .get(ForumUrls.GetTopics)
+        .then((i) => i.data)
+        .then((i) => i.data);
 
-    getMessagesByTopicId = (topicId: number) => axiosApiInstance.get(`${ForumUrls.GetMessages}/${topicId}`).then((i) => i.data);
+    getMessagesByTopicId = (topicId: number) => axiosApiInstance
+        .get(`${ForumUrls.GetMessages}/${topicId}`)
+        .then((i) => i.data);
 
-    createTopic = (data: TObjectLiteral) => axiosApiInstance.post(ForumUrls.CreateTopic, JSON.stringify(data)).then((i) => i.data);
+    createTopic = (data: TObjectLiteral) => axiosApiInstance
+        .post(ForumUrls.CreateTopic, JSON.stringify(data))
+        .then((i) => i.data);
 
-    createMessage = (data: TObjectLiteral) => axiosApiInstance.post(ForumUrls.CreateMessage, JSON.stringify(data)).then((i) => i.data);
+    createMessage = (data: TObjectLiteral) => axiosApiInstance
+        .post(ForumUrls.CreateMessage, JSON.stringify(data))
+        .then((i) => i.data);
 }
 
 export const forumApi = new ForumApi();

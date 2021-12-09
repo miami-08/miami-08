@@ -8,5 +8,4 @@ export const messageModel = {
 
     UserIdentifier: DataType.INTEGER,
     TopicId: DataType.INTEGER,
-
 };

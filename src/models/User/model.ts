@@ -5,11 +5,10 @@ export interface IUser {
     secondName: string;
     displayName: string;
     login: string;
-    avatar: string;
     email: string;
     phone: string;
     password: string;
-    theme:string;
+    theme: string;
 }
 
 export const userModel = {
@@ -20,7 +19,6 @@ export const userModel = {
     secondName: DataType.STRING,
     displayName: DataType.STRING,
     login: DataType.STRING,
-    avatar: DataType.STRING,
     email: DataType.STRING,
     phone: DataType.STRING,
     password: DataType.STRING,
