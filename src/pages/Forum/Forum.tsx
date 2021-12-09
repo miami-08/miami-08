@@ -30,7 +30,7 @@ export const Forum: FC = () => {
         if (!user) {
             history.push('/sign-in');
         }
-    }, []);
+    }, [history, user]);
 
     const createTopic = () => {
         dispatch({
@@ -52,17 +52,14 @@ export const Forum: FC = () => {
         setMessageInput('');
     };
 
-    const handleInputTopicChange = (e) => {
+    const handleInputTopicChange = (e: any) => {
         const { value } = e.target;
-        console.log('topic :>> ', value);
 
         setTopicInput(value);
     };
 
-    const handleMessageInputChange = (e) => {
+    const handleMessageInputChange = (e: any) => {
         const { value } = e.target;
-
-        console.log('message :>> ', value);
 
         setMessageInput(value);
     };
@@ -71,14 +68,14 @@ export const Forum: FC = () => {
         dispatch({
             type: ActionTypes.GetTopics,
         });
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch({
             type: ActionTypes.GetMessages,
             payload: currentTopic,
         });
-    }, [currentTopic]);
+    }, [currentTopic, dispatch]);
 
     return (
         <Styled.Wrapper>
@@ -134,7 +131,7 @@ export const Forum: FC = () => {
                     {currentTopic && messages?.map((message: any) =>
 
                     // eslint-disable-next-line
-                        <Styled.Topic key={message.id}> 
+                        <Styled.Topic key={message.id}>
                             <b> {`${message?.sender?.firstName} ${message?.sender?.secondName}`}:  </b>
                             {message.text}
                         </Styled.Topic>)}
