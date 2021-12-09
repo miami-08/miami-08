@@ -11,7 +11,7 @@ enum AuthUrls {
 }
 
 class AuthApi {
-    signIn = (data: TObjectLiteral) => axiosApiInstance.post(AuthUrls.SignIn, JSON.stringify(data));
+    signIn = (data: TObjectLiteral) => axiosApiInstance.post(AuthUrls.SignIn, JSON.stringify(data)).then((i) => i.data);
 
     logOut = () => axiosInstance.post(AuthUrls.LogOut);
 
@@ -19,7 +19,7 @@ class AuthApi {
 
     getCurrentUserTheme = (userid: number) => axiosApiInstance.post(AuthUrls.UserTheme, { userid });
 
-    signUp = (data: TObjectLiteral) => axiosApiInstance.post(AuthUrls.SignUp, JSON.stringify(data));
+    signUp = (data: TObjectLiteral) => axiosApiInstance.post(AuthUrls.SignUp, JSON.stringify(data)).then((i) => i.data);
 
     getOAuthServiceId = () => axiosInstance.get(AuthUrls.GetOauthServiceId, {
         params: {

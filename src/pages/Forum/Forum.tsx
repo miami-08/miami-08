@@ -54,15 +54,12 @@ export const Forum: FC = () => {
 
     const handleInputTopicChange = (e) => {
         const { value } = e.target;
-        console.log('topic :>> ', value);
 
         setTopicInput(value);
     };
 
     const handleMessageInputChange = (e) => {
         const { value } = e.target;
-
-        console.log('message :>> ', value);
 
         setMessageInput(value);
     };
@@ -78,7 +75,7 @@ export const Forum: FC = () => {
             type: ActionTypes.GetMessages,
             payload: currentTopic,
         });
-    }, [currentTopic]);
+    }, [currentTopic, dispatch]);
 
     return (
         <Styled.Wrapper>
@@ -97,15 +94,6 @@ export const Forum: FC = () => {
             >
                 <Styled.ColumnWrapper>
                     <div> Темы форума </div>
-                    {topics?.map((topic: any) => (
-                        // eslint-disable-next-line
-                        <Styled.Topic
-                            key={topic.id}
-                            onClick={() => setCurrentTopic(topic.id)}
-                        >
-                            {topic.title}
-                        </Styled.Topic>
-                    ))}
 
                     {user ? (
                         <>
@@ -125,11 +113,37 @@ export const Forum: FC = () => {
                             </BaseButton>
                         </>
                     ) : null}
+                    {topics?.map((topic: any) => (
+                        // eslint-disable-next-line
+                        <Styled.Topic
+                            style={{ border: `1px solid ${topic.id === currentTopic ? 'blue' : 'transparent'}` }}
+                            key={topic.id}
+                            onClick={() => setCurrentTopic(topic.id)}
+                        >
+                            {topic.title}
+                        </Styled.Topic>
+                    ))}
 
                 </Styled.ColumnWrapper>
 
                 <Styled.ColumnWrapper>
                     <div> Сообщения в {} </div>
+                    {user ? (
+                        <>
+                            <Input
+                                type="text"
+                                value={messageInput}
+                                onChange={handleMessageInputChange}
+                                placeholder="Сообщение"
+                            />
+                            <BaseButton
+                                disabled={!messageInput}
+                                onClick={createMessage}
+                            >
+                                    Отправить
+                            </BaseButton>
+                        </>
+                    ) : null}
                     {!messages && <div>  Выберите тему </div>}
                     {currentTopic && messages?.map((message: any) =>
 
@@ -139,24 +153,6 @@ export const Forum: FC = () => {
                             {message.text}
                         </Styled.Topic>)}
 
-                    {user ? (
-                        <>
-                            <Input
-                                type="text"
-                                value={messageInput}
-                                onChange={handleMessageInputChange}
-                                placeholder="Сообщение"
-                            />
-                            <div>
-                                <BaseButton
-                                    disabled={!messageInput}
-                                    onClick={createMessage}
-                                >
-                                    Отправить
-                                </BaseButton>
-                            </div>
-                        </>
-                    ) : null}
                 </Styled.ColumnWrapper>
             </div>
 
