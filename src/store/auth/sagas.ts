@@ -76,7 +76,7 @@ export function* currentUserSaga() {
 
 function* signUpRequest(action: any) {
     yield put(signupFetching());
-    const { values, history } = action;
+    const { values, history } = action.payload;
 
     try {
         yield put(signUpLoaded());
@@ -89,7 +89,7 @@ function* signUpRequest(action: any) {
         // @ts-ignore
         const userRes = yield call(AuthApi.signUp, user);
 
-        yield put(setUserData(userRes));
+        yield put(setUserData(userRes.data));
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
@@ -111,9 +111,12 @@ export function* signInRequest(action: any) {
 
         yield put(logInLoaded());
 
-        yield call(currentUserRequest);
+        // yield call(currentUserRequest);
 
-        yield call([history, history.push], RoutePath.Home);
+        // @ts-ignore
+        const userData = yield call([history, history.push], RoutePath.Home);
+
+        yield put(setUserData(userData));
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(logInFailed(reason));
