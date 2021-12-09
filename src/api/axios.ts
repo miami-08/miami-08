@@ -9,9 +9,11 @@ const axiosYandexInstance = axios.create({
 });
 
 export const axiosApiInstance = axios.create({
-    baseURL: `${process.env.REDIRECT_URI}/api/`,
+    baseURL: 'api/',
+    withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
     },
 
 });
