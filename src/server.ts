@@ -33,9 +33,7 @@ dbConnect();
 
 const app = express();
 
-app.use(cors());
-
-app.use(bodyParser.json()).use('/api', routes);
+app.use(cors()).use(bodyParser.json()).use('/api', routes);
 
 // Отдаём статику приложения
 app.use(express.static(path.resolve(__dirname, '../dist')));
