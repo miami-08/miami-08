@@ -38,9 +38,12 @@ export const SignInWithData = () => {
 
     const memoizedHandleSubmit = useCallback(
         (values: FormikValues) => {
-            dispatch({ type: ActionTypes.SignIn, payload: values });
+            dispatch({
+                type: ActionTypes.SignIn,
+                payload: { values, history },
+            });
         },
-        [dispatch],
+        [dispatch, history],
     );
 
     const goToSignUp = () => {

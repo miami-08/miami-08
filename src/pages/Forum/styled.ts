@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
     text-align: center;
     padding: 30px 50px;
     flex-direction: column;
-    height: 100%
+    height: 100%;
 `;
 
 export const Category = styled.h3<ITheme>`
@@ -33,8 +33,7 @@ export const ColumnWrapper = styled.div`
     width: 42%;
     padding: 0 15px;
     height: 100%;
-    overflow-y: auto
-    
+    overflow-y: auto;
 `;
 
 export const Topic = styled.div`

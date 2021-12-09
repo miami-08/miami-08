@@ -43,7 +43,11 @@ export const Forum: FC = () => {
     const createMessage = (): any => {
         dispatch({
             type: ActionTypes.CreateMessage,
-            payload: { UserIdentifier: user?.id || 123, TopicId: currentTopic, text: messageInput },
+            payload: {
+                UserIdentifier: user?.id || 123,
+                TopicId: currentTopic,
+                text: messageInput,
+            },
         });
         setMessageInput('');
     };
@@ -89,16 +93,19 @@ export const Forum: FC = () => {
                     borderRadius: '10px',
                     padding: '15px 10px',
                     gap: '20px',
-
                 }}
             >
-
                 <Styled.ColumnWrapper>
                     <div> Темы форума </div>
-                    {topics?.map((topic: any) =>
-
-                    // eslint-disable-next-line
-                    <Styled.Topic key={topic.id} onClick={() => setCurrentTopic(topic.id)}>{topic.title}</Styled.Topic>)}
+                    {topics?.map((topic: any) => (
+                        // eslint-disable-next-line
+                        <Styled.Topic
+                            key={topic.id}
+                            onClick={() => setCurrentTopic(topic.id)}
+                        >
+                            {topic.title}
+                        </Styled.Topic>
+                    ))}
 
                     {user ? (
                         <>
@@ -114,7 +121,7 @@ export const Forum: FC = () => {
                                 onClick={createTopic}
                                 disabled={!topicInput}
                             >
-                        Создать пост
+                                Создать пост
                             </BaseButton>
                         </>
                     ) : null}
@@ -145,14 +152,12 @@ export const Forum: FC = () => {
                                     disabled={!messageInput}
                                     onClick={createMessage}
                                 >
-                                          Отправить
+                                    Отправить
                                 </BaseButton>
                             </div>
                         </>
                     ) : null}
-
                 </Styled.ColumnWrapper>
-
             </div>
 
             {/* {forumData

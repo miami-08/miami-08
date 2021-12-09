@@ -13,7 +13,8 @@ export const HomePage: FC = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({ type: forumActs.GetMessages, payload: 5 }); return () => {};
+        dispatch({ type: forumActs.GetMessages, payload: 5 });
+        return () => {};
     }, []);
 
     const changeToLight = useCallback(() => {
@@ -49,7 +50,9 @@ export const HomePage: FC = () => {
                     <Link to="/user"> Игрок </Link>
                 </Styled.MenuButton>
                 <Styled.MenuButton>
-                    <Link to={user ? '/leaderboard' : '#'}>Таблица рекордов</Link>
+                    <Link to={user ? '/leaderboard' : '#'}>
+                        Таблица рекордов
+                    </Link>
                 </Styled.MenuButton>
                 <Styled.MenuButton>
                     <Link to={user ? '/forum' : '#'}>Форум</Link>
@@ -62,13 +65,13 @@ export const HomePage: FC = () => {
                                 onClick={changeToLight}
                                 disabled={user ? user.theme === 'light' : false}
                             >
-                        Светлая
+                                Светлая
                             </Styled.Button>
                             <Styled.Button
                                 onClick={changeToBlue}
                                 disabled={user ? user.theme === 'sea' : false}
                             >
-                        Морская
+                                Морская
                             </Styled.Button>
                         </Styled.ThemeWrapper>
                     </>

@@ -31,7 +31,10 @@ Topic.hasMany(Message);
 Message.belongsTo(Topic);
 
 export function dbConnect() {
-    sequelize.authenticate().then(() => sequelize.sync({ force: true })).catch((error) => {
-        throw new Error(`Unable to connect to the database: ${error}`);
-    });
+    sequelize
+        .authenticate()
+        .then(() => sequelize.sync({ force: true }))
+        .catch((error) => {
+            throw new Error(`Unable to connect to the database: ${error}`);
+        });
 }

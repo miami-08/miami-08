@@ -23,10 +23,10 @@ import {
     resetUserData,
 } from 'store/userProfile/slice';
 
-import history from 'utils/history';
-
-function* logOutRequest() {
+function* logOutRequest(action: any) {
     yield put(logOutFetching());
+
+    const { payload: history } = action;
 
     try {
         yield call(AuthApi.logOut);
@@ -76,19 +76,20 @@ export function* currentUserSaga() {
 
 function* signUpRequest(action: any) {
     yield put(signupFetching());
-    const { payload } = action;
+    const { values, history } = action;
 
     try {
         yield put(signUpLoaded());
 
         const user = {
-            ...payload,
+            ...values,
             theme: 'light',
         };
 
-        yield call(AuthApi.signUp, user);
+        // @ts-ignore
+        const userRes = yield call(AuthApi.signUp, user);
 
-        yield put(setUserData(user));
+        yield put(setUserData(userRes));
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
@@ -103,10 +104,10 @@ export function* signUpSaga() {
 
 export function* signInRequest(action: any) {
     yield put(logInFetching());
-    const { payload } = action;
+    const { values, history } = action.payload;
 
     try {
-        yield call(AuthApi.signIn, payload);
+        yield call(AuthApi.signIn, values);
 
         yield put(logInLoaded());
 

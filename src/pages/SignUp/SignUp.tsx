@@ -27,9 +27,12 @@ export const SignUpWithData = () => {
 
     const memoizedHandleSubmit = useCallback(
         (values: FormikValues) => {
-            dispatch({ type: ActionTypes.SignUp, payload: values });
+            dispatch({
+                type: ActionTypes.SignUp,
+                payload: { values, history },
+            });
         },
-        [dispatch],
+        [dispatch, history],
     );
 
     const goToSignUp = () => {
@@ -62,6 +65,5 @@ export const SignUpWithData = () => {
                  На главную страницу
             </BaseButton>
         </UIForm>
-
     );
 };
