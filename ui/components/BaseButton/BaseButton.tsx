@@ -20,12 +20,16 @@ export const StyledButton = styled.button<ITheme & IViewProps & ISizeProps>`
     border: none;
     cursor: pointer;
     border-radius: 8px;
-    background: ${({ theme, view = 'primary' }) =>
-        theme.colors.buttons[view].backgroundColor};
+    background: ${({ theme, view = 'primary' }) => theme.colors.buttons[view].backgroundColor};
     color: ${({ theme, view = 'primary' }) => theme.colors.buttons[view].color};
     transition: all 0.3s ease;
     padding: ${({ size = 's' }) => sizes[size].padding};
     font-size: ${({ size = 's' }) => sizes[size].fontSize};
+    margin-bottom: 5px;
+    
+    &:last-child {
+        margin-bottom: 0;
+    }
 
     &:focus {
         outline: none;
@@ -37,8 +41,7 @@ export const StyledButton = styled.button<ITheme & IViewProps & ISizeProps>`
     }
 
     & a {
-        color: ${({ theme, view = 'primary' }) =>
-            theme.colors.buttons[view].color};
+        color: ${({ theme, view = 'primary' }) => theme.colors.buttons[view].color};
         text-decoration: none;
         cursor: pointer;
     }
