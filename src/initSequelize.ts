@@ -16,12 +16,13 @@ const sequelizeOptions: SequelizeOptions = {
 
 export const sequelize = new Sequelize(sequelizeOptions);
 
-export const Topic = sequelize.define('Topic', topicModel, {});
+export const Topic = sequelize.define('Topic', topicModel);
 
-export const Message = sequelize.define('Message', messageModel, {});
+export const Message = sequelize.define('Message', messageModel);
 
-export const User = sequelize.define('User', userModel, {});
-export const UserTheme = sequelize.define('UserTheme', userThemeModel, {});
+export const User = sequelize.define('User', userModel);
+export const UserTheme = sequelize.define('UserTheme', userThemeModel);
+
 UserTheme.belongsTo(User);
 User.hasMany(Message);
 Message.belongsTo(User);
@@ -29,13 +30,11 @@ Message.belongsTo(User);
 Topic.hasMany(Message);
 Message.belongsTo(Topic);
 
-export async function dbConnect() {
-    try {
-        await sequelize.authenticate();
-        await sequelize.sync();
-
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
+export function dbConnect() {
+    sequelize
+        .authenticate()
+        .then(() => sequelize.sync({ force: true }))
+        .catch((error) => {
+            throw new Error(`Unable to connect to the database: ${error}`);
+        });
 }

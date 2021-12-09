@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { FormikValues } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import ActionTypes from 'store/auth/actionTypes';
 import { IState } from 'store/types';
@@ -29,16 +30,29 @@ const fields = [
 ];
 
 export const SignInWithData = () => {
+    const history = useHistory();
+
     const errorText = useSelector((state: IState) => state.auth.error);
 
     const dispatch = useDispatch();
 
     const memoizedHandleSubmit = useCallback(
         (values: FormikValues) => {
-            dispatch({ type: ActionTypes.SignIn, payload: values });
+            dispatch({
+                type: ActionTypes.SignIn,
+                payload: { values, history },
+            });
         },
-        [dispatch],
+        [dispatch, history],
     );
+
+    const goToSignUp = () => {
+        history.push('/sign-up');
+    };
+
+    const goToHome = () => {
+        history.push('/');
+    };
 
     const memoizedHandleOAuth = useCallback(() => {
         dispatch({ type: ActionTypes.GetAuthSignInCode });
@@ -55,6 +69,14 @@ export const SignInWithData = () => {
         >
             <BaseButton onClick={memoizedHandleOAuth}>
                 Войти через Yandex
+            </BaseButton>
+
+            <BaseButton onClick={goToSignUp} type="button">
+                Зарегистрироваться
+            </BaseButton>
+
+            <BaseButton onClick={goToHome}>
+                 На главную страницу
             </BaseButton>
         </UIForm>
     );

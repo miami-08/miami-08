@@ -17,14 +17,16 @@ export const UIForm: React.FC<IUIFormProps> = ({
     errorText,
     buttonLabel = 'Присоединиться',
 }) => (
-    <Formik
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-    >
-        {({ values, errors, touched, handleChange }) => (
-            <Form>
-                <Styled.DynamicFormBox>
+    <Styled.DynamicFormBox>
+        <Formik
+            onSubmit={handleSubmit}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+        >
+            {({
+                values, errors, touched, handleChange,
+            }) => (
+                <Form>
                     <Styled.Title>{title}</Styled.Title>
                     <Styled.FieldsWrapper>
                         {fields!.map((el) => (
@@ -45,9 +47,9 @@ export const UIForm: React.FC<IUIFormProps> = ({
                     </Styled.FieldsWrapper>
                     <BaseButton type="submit">{buttonLabel}</BaseButton>
                     <StyledError>{errorText}</StyledError>
-                    {children}
-                </Styled.DynamicFormBox>
-            </Form>
-        )}
-    </Formik>
+                </Form>
+            )}
+        </Formik>
+        {children}
+    </Styled.DynamicFormBox>
 );

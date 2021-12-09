@@ -23,11 +23,10 @@ import {
     resetUserData,
 } from 'store/userProfile/slice';
 
-import history from 'utils/history';
-import { mapApiUserToIUser } from 'utils/mapApiUserToUser';
-
-function* logOutRequest() {
+function* logOutRequest(action: any) {
     yield put(logOutFetching());
+
+    const { payload: history } = action;
 
     try {
         yield call(AuthApi.logOut);
@@ -59,12 +58,10 @@ function* currentUserRequest() {
         );
 
         yield put(
-            setUserData(
-                mapApiUserToIUser({
-                    ...response.data,
-                    theme: theme.data.theme,
-                }),
-            ),
+            setUserData({
+                ...response.data,
+                theme: theme.data.theme,
+            }),
         );
     } catch (e: any) {
         const { reason = null } = e.response.data;
@@ -79,22 +76,24 @@ export function* currentUserSaga() {
 
 function* signUpRequest(action: any) {
     yield put(signupFetching());
-    const { payload } = action;
+    const { values, history } = action.payload;
 
     try {
-        const response: TObjectLiteral = yield call(AuthApi.signUp, payload);
         yield put(signUpLoaded());
 
-        yield call(currentUserRequest);
-        yield call(AuthApi.addCurrentUserToDb, {
-            ...payload,
+        const user = {
+            ...values,
             theme: 'light',
-            identifier: response.data.id,
-        });
+        };
+
+        // @ts-ignore
+        const userRes = yield call(AuthApi.signUp, user);
+
+        yield put(setUserData(userRes));
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
-        const { reason = null } = e.response.data;
+        const { reason = null } = e.response;
         yield put(signUpFailed(reason));
     }
 }
@@ -105,14 +104,15 @@ export function* signUpSaga() {
 
 export function* signInRequest(action: any) {
     yield put(logInFetching());
-    const { payload } = action;
+    const { values, history } = action.payload;
 
     try {
-        yield call(AuthApi.signIn, payload);
+        // @ts-ignore
+        const userData = yield call(AuthApi.signIn, values);
 
         yield put(logInLoaded());
 
-        yield call(currentUserRequest);
+        yield put(setUserData(userData));
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {

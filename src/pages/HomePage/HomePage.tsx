@@ -1,15 +1,21 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectCurrentUser } from 'store/userProfile/selectors';
 import ActionTypes from 'store/userProfile/actionTypes';
+import forumActs from 'store/forum/actionTypes';
 
 import * as Styled from './styled';
 
 export const HomePage: FC = () => {
     const user = useSelector(selectCurrentUser);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({ type: forumActs.GetMessages, payload: 5 });
+        return () => {};
+    }, []);
 
     const changeToLight = useCallback(() => {
         dispatch({
@@ -44,26 +50,32 @@ export const HomePage: FC = () => {
                     <Link to="/user"> Игрок </Link>
                 </Styled.MenuButton>
                 <Styled.MenuButton>
-                    <Link to="/leaderboard">Таблица рекордов</Link>
+                    <Link to={user ? '/leaderboard' : '#'}>
+                        Таблица рекордов
+                    </Link>
                 </Styled.MenuButton>
                 <Styled.MenuButton>
-                    <Link to="/forum">Форум</Link>
+                    <Link to={user ? '/forum' : '#'}>Форум</Link>
                 </Styled.MenuButton>
-                <h5>Выбор темы</h5>
-                <Styled.ThemeWrapper>
-                    <Styled.Button
-                        onClick={changeToLight}
-                        disabled={user ? user.theme === 'light' : false}
-                    >
-                        Светлая
-                    </Styled.Button>
-                    <Styled.Button
-                        onClick={changeToBlue}
-                        disabled={user ? user.theme === 'sea' : false}
-                    >
-                        Морская
-                    </Styled.Button>
-                </Styled.ThemeWrapper>
+                {user && (
+                    <>
+                        <h5>Выбор темы</h5>
+                        <Styled.ThemeWrapper>
+                            <Styled.Button
+                                onClick={changeToLight}
+                                disabled={user ? user.theme === 'light' : false}
+                            >
+                                Светлая
+                            </Styled.Button>
+                            <Styled.Button
+                                onClick={changeToBlue}
+                                disabled={user ? user.theme === 'sea' : false}
+                            >
+                                Морская
+                            </Styled.Button>
+                        </Styled.ThemeWrapper>
+                    </>
+                )}
             </Styled.Container>
         </Styled.Wrapper>
     );

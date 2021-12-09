@@ -1,13 +1,11 @@
-import { DataType, Model } from 'sequelize-typescript';
-import { ModelAttributes } from 'sequelize/types';
+import { DataType } from 'sequelize-typescript';
 
-export interface IMessage {
-    text: string;
-}
-
-export const messageModel: ModelAttributes<Model, IMessage> = {
+export const messageModel = {
     text: {
         type: DataType.STRING,
         allowNull: false,
     },
+
+    UserIdentifier: DataType.INTEGER,
+    TopicId: DataType.INTEGER,
 };

@@ -46,7 +46,7 @@ const App: FC = () => {
     const user = useSelector(selectCurrentUser);
 
     return (
-        <ThemeProvider theme={user ? themes[user.theme] : themes.light}>
+        <ThemeProvider theme={user?.theme ? themes[user.theme] : themes.light}>
             <GlobalStyles />
             <ErrorBoundary>
                 <div className="app">

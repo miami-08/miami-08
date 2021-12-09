@@ -1,10 +1,7 @@
 import * as express from 'express';
+import { User } from 'initSequelize';
 
-import {
-    createTheme,
-    findTheme,
-    updateUserThemeById,
-} from 'models/UserTheme/controllers';
+import { findTheme, updateUserThemeById } from 'models/UserTheme/controllers';
 import { createUser, getAllUsers } from 'models/User/controllers';
 import { createMsg, getMsgsByTopicId } from 'models/Message/controllers';
 import { createTopic, getTopics } from 'models/Topic/controllers';
@@ -16,54 +13,132 @@ router.post('/user-theme', (req, res) => {
 
     findTheme(userid.toString())
         .then((el) => res.json(el))
-        .catch(() => res.sendStatus(400));
+        .catch(() => {
+            res.sendStatus(404).send('ошибка при создании темы');
+        });
 });
 
 router.post('/add-user', async (req, res) => {
-    const { first_name, second_name, login, email, phone, identifier } =
-        req.body;
+    const {
+        first_name,
+        second_name,
+        login, email,
+        phone,
+        password,
+        theme,
+    } = req.body;
 
-    await createUser(first_name, second_name, login, email, phone, identifier);
-    await createTheme('light', identifier);
+    createUser(first_name, second_name, login, email, phone, password, theme)
+        .then((user: any) => {
+            const {
+                id: Id, login: Login, first_name: firstName, second_name: secondName, email: Email, phone: Phone,
+            } = user;
 
-    await res.sendStatus(200);
+            const responseUser = {
+                id: Id,
+                login: Login,
+                first_name: firstName,
+                second_name: secondName,
+                email: Email,
+                phone: Phone,
+            };
+
+            res.send(responseUser);
+        })
+        .catch(() => {
+            res.sendStatus(404).send('ошибка при создании юзера');
+        });
 });
 
 router.post('/change-theme', async (req, res) => {
     const { theme, id } = req.body;
     const userTheme = await findTheme(id.toString());
-    updateUserThemeById(userTheme!.id, { theme });
-    res.sendStatus(200);
+
+    updateUserThemeById(userTheme!.id, { theme })
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch(() => {
+            res.sendStatus(404).send('ошибка при изменении темы');
+        });
 });
-router.get('/get-topics', async (_, res) => {
-    const topics = await getTopics();
-    const users = await getAllUsers();
-    const topicsWithMessages = await Promise.all(
-        topics.map(async (topic: any) => {
-            const messages = await getMsgsByTopicId(topic.id);
-            const newMessages = messages.map((mes: any) => {
-                const currentUser: any = users.filter(
-                    // @eslint-ignore
-                    (user: any) => user.identifier === mes.UserIdentifier,
-                )[0];
-                return { ...mes.dataValues, ...currentUser.dataValues };
+
+router.get('/get-topics', (_, res) => {
+    getTopics()
+        .then((topics) => res.send(topics))
+        .catch(() => {
+            res.sendStatus(404).send('Темы не найдены');
+        });
+});
+
+router.get('/messages/:id', (req, res) => {
+    getMsgsByTopicId(parseInt(req.params?.id, 10))
+        .then(async (messages) => {
+            const users: any[] = await getAllUsers();
+
+            const coolMeesage = messages.map((letter: any) => {
+                const sender = users.find(
+                    (user) => user.id === letter.UserIdentifier,
+                );
+
+                if (sender) {
+                    return { ...letter.dataValues, sender };
+                }
+
+                return letter;
             });
-            return { id: topic.id, title: topic.title, messages: newMessages };
-        }),
-    );
-    res.json(topicsWithMessages);
+
+            res.send(coolMeesage);
+        })
+        .catch(() => {
+            res.sendStatus(404).send('Сообщение не найдено');
+        });
 });
 
 router.post('/create-topic', (req, res) => {
     const { title = 'hello' } = req.body;
-    createTopic(title);
-    res.sendStatus(200);
+    createTopic(title)
+        .then(() => getTopics())
+        .then((topics) => res.send(topics))
+        .catch(() => {
+            res.sendStatus(404).send('Ошибка при создании темы');
+        });
 });
 
-router.post('/create-message', async (req, res) => {
+router.post('/create-message', (req, res) => {
     const { text = '', UserIdentifier = 0, TopicId = 0 } = req.body;
-    createMsg(text, UserIdentifier, TopicId);
-    res.sendStatus(200);
+    createMsg(text, UserIdentifier, TopicId)
+        .then(async () => {
+            const messages = await getMsgsByTopicId(TopicId);
+            const users: any[] = await getAllUsers();
+
+            const coolMeesage = messages.map((letter: any) => {
+                const sender = users.find(
+                    (user) => user.id === letter.UserIdentifier,
+                );
+
+                if (sender) {
+                    return { ...letter, dataValues: { ...letter.dataValues, sender } };
+                }
+
+                return letter;
+            });
+
+            res.send(coolMeesage);
+        })
+        .catch(() => {
+            res.sendStatus(404).send('Ошибка при публикации сообщения');
+        });
+});
+
+router.post('/login', (req, res) => {
+    const { login, password } = req.body;
+
+    User.findOne({ where: { login, password } })
+        .then((user) => res.send(user))
+        .catch(() => {
+            res.sendStatus(404).send('Пользователь не найден');
+        });
 });
 
 export default router;

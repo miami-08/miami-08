@@ -1,42 +1,26 @@
-import { DataType, Model } from 'sequelize-typescript';
-import { ModelAttributes } from 'sequelize/types';
+import { DataType } from 'sequelize-typescript';
 
 export interface IUser {
     firstName: string;
     secondName: string;
     displayName: string;
     login: string;
-    avatar: string;
     email: string;
     phone: string;
-    identifier: number;
+    password: string;
+    theme: string;
 }
 
-export const userModel: ModelAttributes<Model, IUser> = {
-    identifier: {
-        type: DataType.STRING,
-        primaryKey: true,
-    },
+export const userModel = {
     firstName: {
         type: DataType.STRING,
         allowNull: false,
     },
-    secondName: {
-        type: DataType.STRING,
-    },
-    displayName: {
-        type: DataType.STRING,
-    },
-    login: {
-        type: DataType.STRING,
-    },
-    avatar: {
-        type: DataType.STRING,
-    },
-    email: {
-        type: DataType.STRING,
-    },
-    phone: {
-        type: DataType.STRING,
-    },
+    secondName: DataType.STRING,
+    displayName: DataType.STRING,
+    login: DataType.STRING,
+    email: DataType.STRING,
+    phone: DataType.STRING,
+    password: DataType.STRING,
+    theme: DataType.STRING,
 };
