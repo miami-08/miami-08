@@ -20,12 +20,30 @@ router.post('/user-theme', (req, res) => {
 
 router.post('/add-user', async (req, res) => {
     const {
-        first_name, second_name, login, email, phone, password, theme,
+        first_name,
+        second_name,
+        login, email,
+        phone,
+        password,
+        theme,
     } = req.body;
 
     createUser(first_name, second_name, login, email, phone, password, theme)
-        .then((user) => {
-            res.send(user);
+        .then((user: any) => {
+            const {
+                id: Id, login: Login, first_name: firstName, second_name: secondName, email: Email, phone: Phone,
+            } = user;
+
+            const responseUser = {
+                id: Id,
+                login: Login,
+                first_name: firstName,
+                second_name: secondName,
+                email: Email,
+                phone: Phone,
+            };
+
+            res.send(responseUser);
         })
         .catch(() => {
             res.sendStatus(404).send('ошибка при создании юзера');
