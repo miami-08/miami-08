@@ -13,7 +13,9 @@ router.post('/user-theme', (req, res) => {
 
     findTheme(userid.toString())
         .then((el) => res.json(el))
-        .catch(() => res.sendStatus(400));
+        .catch(() => {
+            res.sendStatus(404).send('ошибка при создании темы');
+        });
 });
 
 router.post('/add-user', async (req, res) => {
@@ -25,20 +27,30 @@ router.post('/add-user', async (req, res) => {
         .then((user) => {
             res.send(user);
         })
-        .catch((error) => {
-            console.log('POST /add-user  error :>> ', error);
+        .catch(() => {
+            res.sendStatus(404).send('ошибка при создании юзера');
         });
 });
 
 router.post('/change-theme', async (req, res) => {
     const { theme, id } = req.body;
     const userTheme = await findTheme(id.toString());
-    updateUserThemeById(userTheme!.id, { theme });
-    res.sendStatus(200);
+
+    updateUserThemeById(userTheme!.id, { theme })
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch(() => {
+            res.sendStatus(404).send('ошибка при изменении темы');
+        });
 });
 
 router.get('/get-topics', (_, res) => {
-    getTopics().then((topics) => res.send(topics));
+    getTopics()
+        .then((topics) => res.send(topics))
+        .catch(() => {
+            res.sendStatus(404).send('Темы не найдены');
+        });
 });
 
 router.get('/messages/:id', (req, res) => {
@@ -46,16 +58,19 @@ router.get('/messages/:id', (req, res) => {
         .then((messages) => {
             res.send(messages);
         })
-        .catch((err) => {
-            console.log(' GET messages/:id err :>> ', err);
+        .catch(() => {
+            res.sendStatus(404).send('Сообщение не найдено');
         });
 });
 
 router.post('/create-topic', (req, res) => {
-    const { title = 'hello', topicId } = req.body;
-    createTopic(title, topicId)
+    const { title = 'hello' } = req.body;
+    createTopic(title)
         .then(() => getTopics())
-        .then((topics) => res.send(topics));
+        .then((topics) => res.send(topics))
+        .catch(() => {
+            res.sendStatus(404).send('Ошибка при создании темы');
+        });
 });
 
 router.post('/create-message', (req, res) => {
@@ -86,13 +101,20 @@ router.post('/create-message', (req, res) => {
                 return letter;
             });
         })
-        .then((messages) => res.send(messages));
+        .then((messages) => res.send(messages))
+        .catch(() => {
+            res.sendStatus(404).send('Ошибка при публикации сообщения');
+        });
 });
 
 router.post('/login', (req, res) => {
     const { login, password } = req.body;
 
-    User.findOne({ where: { login, password } }).then((user) => res.send(user));
+    User.findOne({ where: { login, password } })
+        .then((user) => res.send(user))
+        .catch(() => {
+            res.sendStatus(404).send('Пользователь не найден');
+        });
 });
 
 export default router;
