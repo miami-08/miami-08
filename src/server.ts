@@ -12,6 +12,7 @@ import config from '../webpack/client.config';
 
 import serverRenderMiddleware from './server-render-middleware';
 
+const cors = require('cors');
 const bodyParser = require('body-parser');
 
 function getWebpackMiddlewares(): RequestHandler[] {
@@ -31,6 +32,9 @@ function getWebpackMiddlewares(): RequestHandler[] {
 dbConnect();
 
 const app = express();
+
+app.use(cors());
+
 app.use(bodyParser.json()).use('/api', routes);
 
 // Отдаём статику приложения
