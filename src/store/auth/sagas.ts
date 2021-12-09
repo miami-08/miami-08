@@ -93,7 +93,7 @@ function* signUpRequest(action: any) {
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
-        const { reason = null } = e.response.data;
+        const { reason = null } = e.response;
         yield put(signUpFailed(reason));
     }
 }

@@ -55,8 +55,22 @@ router.get('/get-topics', (_, res) => {
 
 router.get('/messages/:id', (req, res) => {
     getMsgsByTopicId(parseInt(req.params?.id, 10))
-        .then((messages) => {
-            res.send(messages);
+        .then(async (messages) => {
+            const users: any[] = await getAllUsers();
+
+            const coolMeesage = messages.map((letter: any) => {
+                const sender = users.find(
+                    (user) => user.id === letter.UserIdentifier,
+                );
+
+                if (sender) {
+                    return { ...letter.dataValues, sender };
+                }
+
+                return letter;
+            });
+
+            res.send(coolMeesage);
         })
         .catch(() => {
             res.sendStatus(404).send('Сообщение не найдено');
@@ -80,28 +94,20 @@ router.post('/create-message', (req, res) => {
             const messages = await getMsgsByTopicId(TopicId);
             const users: any[] = await getAllUsers();
 
-            console.log('users :>> ', users);
-
-            return messages.map((letter: any) => {
+            const coolMeesage = messages.map((letter: any) => {
                 const sender = users.find(
                     (user) => user.id === letter.UserIdentifier,
                 );
 
-                console.log(
-                    'letter.UserIdentifier :>> ',
-                    letter.UserIdentifier,
-                );
-                console.log('users[0].id :>> ', users[0].id);
-                console.log('users[0].id :>> ', users[0]);
-
                 if (sender) {
-                    return { ...letter, sender };
+                    return { ...letter, dataValues: { ...letter.dataValues, sender } };
                 }
 
                 return letter;
             });
+
+            res.send(coolMeesage);
         })
-        .then((messages) => res.send(messages))
         .catch(() => {
             res.sendStatus(404).send('Ошибка при публикации сообщения');
         });
