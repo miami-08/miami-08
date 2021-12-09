@@ -4,6 +4,7 @@ import TForum from 'types/TForum';
 
 export const initialState: TForum = {
     forumData: null,
+    messages: [],
     pending: false,
     error: null,
 };
@@ -25,9 +26,15 @@ const forumSlice = createSlice({
             state.error = null;
             state.forumData = action.payload;
         },
+
+        setTopicsMessages(state, action) {
+            state.messages = action.payload;
+        },
     },
 });
 
-export const { dataFetching, setForumData, dataFailed } = forumSlice.actions;
+export const {
+    dataFetching, setForumData, dataFailed, setTopicsMessages,
+} = forumSlice.actions;
 
 export default forumSlice.reducer;

@@ -1,10 +1,7 @@
 import * as express from 'express';
+import { User } from 'initSequelize';
 
-import {
-    createTheme,
-    findTheme,
-    updateUserThemeById,
-} from 'models/UserTheme/controllers';
+import { findTheme, updateUserThemeById } from 'models/UserTheme/controllers';
 import { createUser, getAllUsers } from 'models/User/controllers';
 import { createMsg, getMsgsByTopicId } from 'models/Message/controllers';
 import { createTopic, getTopics } from 'models/Topic/controllers';
@@ -20,13 +17,17 @@ router.post('/user-theme', (req, res) => {
 });
 
 router.post('/add-user', async (req, res) => {
-    const { first_name, second_name, login, email, phone, identifier } =
-        req.body;
+    const {
+        first_name, second_name, login, email, phone, password, theme,
+    } = req.body;
 
-    await createUser(first_name, second_name, login, email, phone, identifier);
-    await createTheme('light', identifier);
-
-    await res.sendStatus(200);
+    createUser(first_name, second_name, login, email, phone, password, theme)
+        .then((user) => {
+            res.send(user);
+        })
+        .catch((error) => {
+            console.log('POST /add-user  error :>> ', error);
+        });
 });
 
 router.post('/change-theme', async (req, res) => {
@@ -35,35 +36,63 @@ router.post('/change-theme', async (req, res) => {
     updateUserThemeById(userTheme!.id, { theme });
     res.sendStatus(200);
 });
-router.get('/get-topics', async (_, res) => {
-    const topics = await getTopics();
-    const users = await getAllUsers();
-    const topicsWithMessages = await Promise.all(
-        topics.map(async (topic: any) => {
-            const messages = await getMsgsByTopicId(topic.id);
-            const newMessages = messages.map((mes: any) => {
-                const currentUser: any = users.filter(
-                    // @eslint-ignore
-                    (user: any) => user.identifier === mes.UserIdentifier,
-                )[0];
-                return { ...mes.dataValues, ...currentUser.dataValues };
-            });
-            return { id: topic.id, title: topic.title, messages: newMessages };
-        }),
-    );
-    res.json(topicsWithMessages);
+
+router.get('/get-topics', (_, res) => {
+    getTopics().then((topics) => res.send(topics));
+});
+
+router.get('/messages/:id', (req, res) => {
+    getMsgsByTopicId(parseInt(req.params?.id, 10))
+        .then((messages) => {
+            res.send(messages);
+        })
+        .catch((err) => {
+            console.log(' GET messages/:id err :>> ', err);
+        });
 });
 
 router.post('/create-topic', (req, res) => {
-    const { title = 'hello' } = req.body;
-    createTopic(title);
-    res.sendStatus(200);
+    const { title = 'hello', topicId } = req.body;
+    createTopic(title, topicId)
+        .then(() => getTopics())
+        .then((topics) => res.send(topics));
 });
 
-router.post('/create-message', async (req, res) => {
+router.post('/create-message', (req, res) => {
     const { text = '', UserIdentifier = 0, TopicId = 0 } = req.body;
-    createMsg(text, UserIdentifier, TopicId);
-    res.sendStatus(200);
+    createMsg(text, UserIdentifier, TopicId)
+        .then(async () => {
+            const messages = await getMsgsByTopicId(TopicId);
+            const users: any[] = await getAllUsers();
+
+            console.log('users :>> ', users);
+
+            return messages.map((letter: any) => {
+                const sender = users.find(
+                    (user) => user.id === letter.UserIdentifier,
+                );
+
+                console.log(
+                    'letter.UserIdentifier :>> ',
+                    letter.UserIdentifier,
+                );
+                console.log('users[0].id :>> ', users[0].id);
+                console.log('users[0].id :>> ', users[0]);
+
+                if (sender) {
+                    return { ...letter, sender };
+                }
+
+                return letter;
+            });
+        })
+        .then((messages) => res.send(messages));
+});
+
+router.post('/login', (req, res) => {
+    const { login, password } = req.body;
+
+    User.findOne({ where: { login, password } }).then((user) => res.send(user));
 });
 
 export default router;

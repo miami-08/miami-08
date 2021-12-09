@@ -1,10 +1,10 @@
 import { Topic } from 'initSequelize';
 
-export async function createTopic(title: string) {
-    return Topic.create({ title });
+export function createTopic(title: string, topicid: number) {
+    return Topic.create({ title, topicid });
 }
 
-export async function getTopics() {
+export function getTopics() {
     return Topic.findAll({
         attributes: ['id', 'title'],
     });

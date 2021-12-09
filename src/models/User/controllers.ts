@@ -7,7 +7,8 @@ export async function createUser(
     login: string,
     email: string,
     phone: string,
-    identifier: number,
+    password: string,
+    theme: string,
 ) {
     return User.create({
         firstName,
@@ -15,12 +16,11 @@ export async function createUser(
         login,
         email,
         phone,
-        identifier,
+        password,
+        theme,
     });
 }
 
 export async function getAllUsers() {
-    return User.findAll({
-        attributes: ['firstName', 'secondName', 'identifier'],
-    });
+    return User.findAll();
 }

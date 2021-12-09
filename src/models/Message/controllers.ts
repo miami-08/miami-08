@@ -1,6 +1,6 @@
 import { Message } from 'initSequelize';
 
-export async function createMsg(
+export function createMsg(
     text: string,
     UserIdentifier: number,
     TopicId: number,
@@ -8,6 +8,6 @@ export async function createMsg(
     return Message.create({ text, UserIdentifier, TopicId });
 }
 
-export async function getMsgsByTopicId(TopicId: number) {
+export function getMsgsByTopicId(TopicId: number) {
     return Message.findAll({ where: { TopicId } });
 }

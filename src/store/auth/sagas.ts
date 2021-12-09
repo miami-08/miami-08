@@ -24,7 +24,6 @@ import {
 } from 'store/userProfile/slice';
 
 import history from 'utils/history';
-import { mapApiUserToIUser } from 'utils/mapApiUserToUser';
 
 function* logOutRequest() {
     yield put(logOutFetching());
@@ -59,12 +58,10 @@ function* currentUserRequest() {
         );
 
         yield put(
-            setUserData(
-                mapApiUserToIUser({
-                    ...response.data,
-                    theme: theme.data.theme,
-                }),
-            ),
+            setUserData({
+                ...response.data,
+                theme: theme.data.theme,
+            }),
         );
     } catch (e: any) {
         const { reason = null } = e.response.data;
@@ -82,15 +79,16 @@ function* signUpRequest(action: any) {
     const { payload } = action;
 
     try {
-        const response: TObjectLiteral = yield call(AuthApi.signUp, payload);
         yield put(signUpLoaded());
 
-        yield call(currentUserRequest);
-        yield call(AuthApi.addCurrentUserToDb, {
+        const user = {
             ...payload,
             theme: 'light',
-            identifier: response.data.id,
-        });
+        };
+
+        yield call(AuthApi.signUp, user);
+
+        yield put(setUserData(user));
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {

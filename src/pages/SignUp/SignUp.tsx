@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import ActionTypes from 'store/auth/actionTypes';
+
+import { BaseButton } from 'ui/components';
 
 import { UIForm } from 'uicomponents/Form';
 
@@ -18,6 +21,8 @@ const initialValues = {
 };
 
 export const SignUpWithData = () => {
+    const history = useHistory();
+
     const dispatch = useDispatch();
 
     const memoizedHandleSubmit = useCallback(
@@ -26,6 +31,14 @@ export const SignUpWithData = () => {
         },
         [dispatch],
     );
+
+    const goToSignUp = () => {
+        history.push('sign-in');
+    };
+
+    const goToHome = () => {
+        history.push('/');
+    };
 
     return (
         <UIForm
@@ -41,6 +54,14 @@ export const SignUpWithData = () => {
                 { label: 'Пароль', name: 'password', type: 'password' },
                 { label: 'Телефон', name: 'phone' },
             ]}
-        />
+        >
+            <BaseButton onClick={goToSignUp}>
+                 На страницу логина
+            </BaseButton>
+            <BaseButton onClick={goToHome}>
+                 На главную страницу
+            </BaseButton>
+        </UIForm>
+
     );
 };

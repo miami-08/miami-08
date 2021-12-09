@@ -1,10 +1,12 @@
-import React, { FC, useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {
+    FC, useState, useEffect,
+} from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ActionTypes from 'store/forum/actionTypes';
-import { TRootState } from 'store/types';
 import { selectCurrentUser } from 'store/userProfile/selectors';
+import { selectForumMessages, selectTopics } from 'store/forum/selectors';
 
 import { Title } from 'ui/components/Title';
 import { BaseButton, Input } from 'ui/components';
@@ -12,55 +14,148 @@ import { BaseButton, Input } from 'ui/components';
 import * as Styled from './styled';
 
 export const Forum: FC = () => {
-    const [inputValue, setInputValue] = useState({} as any);
     const dispatch = useDispatch();
+
+    const history = useHistory();
+
+    const [topicInput, setTopicInput] = useState('');
+    const [messageInput, setMessageInput] = useState('');
+    const [currentTopic, setCurrentTopic] = useState(null);
+
     const user = useSelector(selectCurrentUser);
-    const forumData = useSelector((state: TRootState) => state.forum.forumData);
+    const topics = useSelector(selectTopics);
+    const messages = useSelector(selectForumMessages);
 
-    console.log(forumData);
-    const createTopic = useCallback(
-        (title) => {
-            dispatch({
-                type: ActionTypes.CreateTopic,
-                payload: { title },
-            });
-            setInputValue((state: any) => ({
-                ...state,
-                newTopic: '',
-            }));
-        },
-        [dispatch],
-    );
+    useEffect(() => {
+        if (!user) {
+            history.push('/sign-in');
+        }
+    }, []);
 
-    const createMessage = useCallback(
-        // eslint-disable-next-line max-params
-        (TopicId, UserIdentifier, text, title): any => {
-            dispatch({
-                type: ActionTypes.CreateMessage,
-                payload: { UserIdentifier, TopicId, text },
-            });
-            setInputValue((state: any) => ({
-                ...state,
-                [title]: '',
-            }));
-        },
-        [dispatch],
-    );
-
-    const handleInputChange = (e) => {
-        const { value } = e.target;
-        const { name } = e.target;
-
-        setInputValue((state: any) => ({
-            ...state,
-            [name]: value,
-        }));
+    const createTopic = () => {
+        dispatch({
+            type: ActionTypes.CreateTopic,
+            payload: { title: topicInput },
+        });
+        setTopicInput('');
     };
+
+    const createMessage = (): any => {
+        dispatch({
+            type: ActionTypes.CreateMessage,
+            payload: { UserIdentifier: user?.id || 123, TopicId: currentTopic, text: messageInput },
+        });
+        setMessageInput('');
+    };
+
+    const handleInputTopicChange = (e) => {
+        const { value } = e.target;
+        console.log('topic :>> ', value);
+
+        setTopicInput(value);
+    };
+
+    const handleMessageInputChange = (e) => {
+        const { value } = e.target;
+
+        console.log('message :>> ', value);
+
+        setMessageInput(value);
+    };
+
+    useEffect(() => {
+        dispatch({
+            type: ActionTypes.GetTopics,
+        });
+    }, []);
+
+    useEffect(() => {
+        dispatch({
+            type: ActionTypes.GetMessages,
+            payload: currentTopic,
+        });
+    }, [currentTopic]);
 
     return (
         <Styled.Wrapper>
-            <Title>Форум</Title>
-            {forumData
+            <Title>Форум </Title>
+
+            <div
+                style={{
+                    display: 'flex',
+                    height: '100%',
+                    width: '100%',
+                    justifyContent: 'space-around',
+                    borderRadius: '10px',
+                    padding: '15px 10px',
+                    gap: '20px',
+
+                }}
+            >
+
+                <Styled.ColumnWrapper>
+                    <div> Темы форума </div>
+                    {topics?.map((topic: any) =>
+
+                    // eslint-disable-next-line
+                    <Styled.Topic key={topic.id} onClick={() => setCurrentTopic(topic.id)}>{topic.title}</Styled.Topic>)}
+
+                    {user ? (
+                        <>
+                            <input
+                                value={topicInput}
+                                name="newTopic"
+                                placeholder="Новая тема"
+                                onChange={handleInputTopicChange}
+                            />
+                            <BaseButton
+                                view="primaryFlat"
+                                size="s"
+                                onClick={createTopic}
+                                disabled={!topicInput}
+                            >
+                        Создать пост
+                            </BaseButton>
+                        </>
+                    ) : null}
+
+                </Styled.ColumnWrapper>
+
+                <Styled.ColumnWrapper>
+                    <div> Сообщения в {} </div>
+                    {!messages && <div>  Выберите тему </div>}
+                    {currentTopic && messages?.map((message: any) =>
+
+                    // eslint-disable-next-line
+                        <Styled.Topic key={message.id}> 
+                            <b> {`${message?.sender?.firstName} ${message?.sender?.secondName}`}:  </b>
+                            {message.text}
+                        </Styled.Topic>)}
+
+                    {user ? (
+                        <>
+                            <Input
+                                type="text"
+                                value={messageInput}
+                                onChange={handleMessageInputChange}
+                                placeholder="Сообщение"
+                            />
+                            <div>
+                                <BaseButton
+                                    disabled={!messageInput}
+                                    onClick={createMessage}
+                                >
+                                          Отправить
+                                </BaseButton>
+                            </div>
+                        </>
+                    ) : null}
+
+                </Styled.ColumnWrapper>
+
+            </div>
+
+            {/* {forumData
                 ? forumData.data.map((el: any) => (
                       <div key={el.id}>
                           <Styled.Category>{el.title}</Styled.Category>
@@ -75,53 +170,9 @@ export const Forum: FC = () => {
                               ))}
                           </Styled.Messages>
 
-                          {user ? (
-                              <>
-                                  <Input
-                                      type="text"
-                                      name={el.title}
-                                      value={inputValue[el.title]}
-                                      onChange={handleInputChange}
-                                      placeholder="Сообщение"
-                                  />
-                                  <div>
-                                      <BaseButton
-                                          onClick={() =>
-                                              createMessage(
-                                                  el.id,
-                                                  user.id,
-                                                  inputValue[el.title],
-                                                  el.title,
-                                              )
-                                          }
-                                      >
-                                          Отправить
-                                      </BaseButton>
-                                  </div>
-                              </>
-                          ) : null}
                       </div>
                   ))
-                : 'Нет тем'}
-
-            {user ? (
-                <>
-                    <h5>Новый пост</h5>
-                    <input
-                        value={inputValue.newTopic}
-                        name="newTopic"
-                        placeholder="Новая тема"
-                        onChange={handleInputChange}
-                    />
-                    <BaseButton
-                        view="primaryFlat"
-                        size="s"
-                        onClick={() => createTopic(inputValue.newTopic)}
-                    >
-                        Создать пост
-                    </BaseButton>
-                </>
-            ) : null}
+                : 'Нет тем'} */}
 
             <BaseButton view="primaryFlat" size="s">
                 <Link to="/"> Домой </Link>

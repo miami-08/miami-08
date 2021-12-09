@@ -20,6 +20,7 @@ import {
 import {
     createMessageSaga,
     createTopicsSaga,
+    getMessages,
     getTopicsSaga,
 } from 'store/forum/sagas';
 
@@ -42,5 +43,6 @@ export default function* rootSaga() {
         createMessageSaga(),
         createTopicsSaga(),
         getTopicsSaga(),
+        getMessages(),
     ]);
 }

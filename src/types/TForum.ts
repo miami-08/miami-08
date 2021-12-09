@@ -5,6 +5,7 @@ import TNullable from './TNullable';
 
 interface IForumProps extends IDataStatus {
     forumData: TNullable<IForum>;
+    messages: TNullable<any[]>
 }
 
 type TForum = IForumProps;
