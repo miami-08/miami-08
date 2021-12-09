@@ -89,7 +89,7 @@ function* signUpRequest(action: any) {
         // @ts-ignore
         const userRes = yield call(AuthApi.signUp, user);
 
-        yield put(setUserData(userRes.data));
+        yield put(setUserData(userRes));
 
         yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
@@ -107,16 +107,14 @@ export function* signInRequest(action: any) {
     const { values, history } = action.payload;
 
     try {
-        yield call(AuthApi.signIn, values);
+        // @ts-ignore
+        const userData = yield call(AuthApi.signIn, values);
 
         yield put(logInLoaded());
 
-        // yield call(currentUserRequest);
-
-        // @ts-ignore
-        const userData = yield call([history, history.push], RoutePath.Home);
-
         yield put(setUserData(userData));
+
+        yield call([history, history.push], RoutePath.Home);
     } catch (e: any) {
         const { reason = null } = e.response.data;
         yield put(logInFailed(reason));
